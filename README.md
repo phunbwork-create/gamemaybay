@@ -1,19 +1,33 @@
-# 🚀 CHIẾN CƠ TOÁN HỌC: VỆ BINH NGÂN HÀ (Math Sky Striker)
+# 🐔 CHIẾN CƠ TOÁN HỌC: BẮN GÀ & KHỦNG LONG KHÔNG GIAN 🦖
 
-> **Web Game Bắn Máy Bay Học Toán Dành Cho Học Sinh Tiểu Học**  
-> Chơi trực tiếp trên trình duyệt (PC, Laptop, iPad, Máy tính bảng) mà không cần cài đặt!
+> **Web Game Bắn Gà & Khủng Long Học Toán Dành Cho Học Sinh Tiểu Học**  
+> Đồ họa chuẩn phong cách *Chicken Invaders* huyền thoại kết hợp biệt đội Khủng Long Vũ Trụ Chibi siêu đáng yêu!
 
-🌐 **Chơi Online Ngay Tại:** [https://phunbwork-create.github.io/gamemaybay/](https://phunbwork-create.github.io/gamemaybay/)
+🌐 **Chơi Trực Tiếp Trên Trình Duyệt:** [https://phunbwork-create.github.io/gamemaybay/](https://phunbwork-create.github.io/gamemaybay/)
 
 ---
 
-## 🌟 Giới Thiệu Trò Chơi
+## 🌟 Những Điểm Mới Trong Phiên Bản Nâng Cấp
 
-**Chiến Cơ Toán Học** kết hợp giữa thể loại bắn phi thuyền Arcade vui nhộn và việc rèn luyện tính nhẩm toán học tiểu học, giúp các bé vừa học vừa chơi:
-- **Đồ họa Chibi ngộ nghĩnh, màu sắc rực rỡ**, âm thanh vui tai tổng hợp qua Web Audio API (chạy 100% offline).
-- **Radar Chỉ Huy Viễn Thám:** Hiển thị phép tính to rõ ràng ở trung tâm phía trên (Ví dụ: `358 + 267 = ?` hoặc `8 x 7 = ?`).
-- **Tàu địch mang số đáp án:** Các phi thuyền ngoài hành tinh mang 1 đáp án ĐÚNG và 2-3 đáp án BẪY bay xuống với tốc độ vừa vặn để trẻ quan sát và tính toán.
-- **Bé lái máy bay:** Bắn tên lửa vào đúng kẻ địch mang kết quả chính xác để nổ pháo hoa sao vàng, nhận điểm và tích combo!
+1. **Phi Thuyền Chuẩn Phong Cách Chicken Invaders:**
+   - Thân tàu kim loại màu bạc bóng bẩy, cánh hình bán nguyệt vòm rộng đặc trưng.
+   - Luồng xả phản lực hạt plasma màu xanh neon rực rỡ phía sau.
+   - Đạn Laser màu đỏ/cam hoặc đạn Sao Vàng khi vào Fever Mode!
+
+2. **Kẻ Địch Đàn Gà Không Gian (Space Chickens):**
+   - Thân tròn mập mạp màu đỏ, mào gà xinh xắn, mắt to tròn hài hước.
+   - Cánh lông vũ trắng xòe ra hai bên **vỗ cánh phành phạch sống động** theo nhịp bay.
+   - Bắn trúng gà: lông gà bay tung tóe, rơi ra **Đùi Gà Nướng Vàng Rượm 🍗** hoặc **Trứng Vàng 🥚** cho tàu bay vào nhặt lấy thêm điểm!
+
+3. **Biệt Đội Khủng Long Vũ Trụ (Space Dinosaurs):**
+   - Khủng long Chibi màu xanh lá siêu cute (T-Rex không gian) đội mũ phi hành gia bong bóng khí, vảy lưng cam vàng lấp lánh, răng sún ngộ nghĩnh.
+   - Tùy chọn 3 chế độ biệt đội: *Cả Gà & Khủng Long*, *Chỉ Đàn Gà*, hoặc *Chỉ Khủng Long*.
+
+4. **Background Tinh Vân Tím Huyền Ảo (Cosmic Nebula):**
+   - Mây tinh vân tím, hồng và xanh neon phát sáng mờ ảo cùng bụi sao lấp lánh giống hệt 100% bản gốc Chicken Invaders.
+
+5. **Đại Đế Khủng Long Bạo Chúa & Mẹ Gà Khổng Lồ (Boss Battle):**
+   - Vòng 10 xuất hiện Boss khổng lồ với 3 nấc máu thách đấu các bài toán hóc búa!
 
 ---
 
@@ -54,13 +68,6 @@ Ngay trên màn hình chọn chế độ, bấm nút **"Nhập Đề Từ File E
 
 ## 🛠️ Công Nghệ Phát Triển
 
-- **HTML5 Canvas 2D:** Xử lý hiệu ứng đồ họa 60FPS, hệ thống hạt Particle nổ sao lấp lánh (Confetti & Sparkles).
-- **Vanilla CSS3:** Giao diện bo tròn phong cách Chibi Glassmorphism.
-- **Web Audio API:** Tạo hiệu ứng âm thanh sống động trực tiếp bằng code, hoạt động offline 100% không lo lỗi file nhạc ngoài.
+- **HTML5 Canvas 2D:** Render 60FPS mượt mà với chuyển động vỗ cánh của đàn gà, hoạt ảnh đùi gà/trứng rơi, hiệu ứng tinh vân vũ trụ.
+- **Web Audio API:** Hiệu ứng tiếng gà kêu quác quác, tiếng gầm khủng long cute, tiếng laser, chuông khải hoàn 100% offline.
 - **SheetJS (xlsx.full.min.js):** Đọc và tạo file Excel client-side an toàn và bảo mật.
-
----
-
-## 👨‍💻 Tác Giả & Bản Quyền
-
-Dự án được xây dựng với tình yêu dành cho giáo dục tiểu học Việt Nam. Mọi đóng góp và ý kiến phản hồi xin vui lòng tạo Issue hoặc Pull Request trên repository.

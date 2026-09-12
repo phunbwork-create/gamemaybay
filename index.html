@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Chiến Cơ Toán Học - Vệ Binh Ngân Hà (Math Sky Striker)</title>
+  <title>Chiến Cơ Toán Học: Bắn Gà & Khủng Long Không Gian</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
@@ -12,15 +12,12 @@
   <style>
     :root {
       --primary: #4F46E5;
-      --primary-bright: #6366F1;
       --accent-yellow: #FBBF24;
       --accent-orange: #F97316;
-      --accent-pink: #EC4899;
       --accent-green: #10B981;
-      --accent-cyan: #06B6D4;
-      --bg-dark: #0F172A;
-      --panel-bg: rgba(30, 41, 59, 0.85);
-      --panel-border: rgba(255, 255, 255, 0.15);
+      --accent-cyan: #38BDF8;
+      --bg-dark: #07061A;
+      --panel-bg: rgba(15, 12, 41, 0.85);
       --font-main: 'Nunito', sans-serif;
       --font-display: 'Fredoka One', 'Nunito', cursive;
     }
@@ -50,7 +47,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: radial-gradient(circle at center, #1E1B4B 0%, #0F172A 100%);
+      background: radial-gradient(circle at center, #1B1044 0%, #08031C 100%);
     }
 
     canvas#gameCanvas {
@@ -75,14 +72,14 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 16px;
+      padding: 14px 20px;
     }
 
     .interactive {
       pointer-events: auto;
     }
 
-    /* Top HUD */
+    /* Top HUD: Chicken Invaders Style */
     .hud-top {
       display: flex;
       justify-content: space-between;
@@ -93,65 +90,50 @@
       margin: 0 auto;
     }
 
-    .hud-card {
-      background: var(--panel-bg);
-      backdrop-filter: blur(12px);
-      border: 2px solid var(--panel-border);
-      border-radius: 20px;
-      padding: 10px 18px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    /* Chicken Invaders Classic Score Pill */
+    .ci-score-capsule {
+      background: linear-gradient(180deg, #1E3A8A 0%, #0F172A 100%);
+      border: 2px solid #38BDF8;
+      border-radius: 30px;
+      padding: 6px 20px;
+      box-shadow: 0 4px 18px rgba(56, 189, 248, 0.4), inset 0 2px 4px rgba(255,255,255,0.4);
       display: flex;
       align-items: center;
       gap: 12px;
     }
-
-    .hearts-container {
-      display: flex;
-      gap: 6px;
-      font-size: 26px;
-      filter: drop-shadow(0 2px 6px rgba(236,72,153,0.5));
-    }
-
-    .score-badge {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    .score-label {
-      font-size: 11px;
-      font-weight: 800;
-      color: #94A3B8;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .score-value {
+    .ci-score-val {
       font-family: var(--font-display);
-      font-size: 28px;
-      color: var(--accent-yellow);
-      text-shadow: 0 2px 10px rgba(251,191,36,0.5);
-      line-height: 1;
+      font-size: 26px;
+      color: #FFFFFF;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .hearts-box {
+      display: flex;
+      gap: 4px;
+      font-size: 20px;
     }
 
-    /* Central Math Radar */
+    /* Central Math Cockpit Radar */
     .math-radar {
-      background: linear-gradient(135deg, rgba(79, 70, 229, 0.9) 0%, rgba(147, 51, 234, 0.9) 100%);
-      border: 3px solid #A7F3D0;
-      border-radius: 24px;
-      padding: 8px 32px;
+      background: linear-gradient(135deg, rgba(30, 27, 75, 0.95) 0%, rgba(67, 56, 202, 0.9) 100%);
+      border: 3px solid #FCD34D;
+      border-radius: 28px;
+      padding: 6px 36px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(79, 70, 229, 0.6), inset 0 2px 10px rgba(255,255,255,0.4);
-      animation: pulseRadar 2.5s infinite ease-in-out;
-      min-width: 320px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(252, 211, 77, 0.4);
+      min-width: 340px;
+      animation: pulseCockpit 3s infinite ease-in-out;
     }
-    @keyframes pulseRadar {
-      0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(79, 70, 229, 0.6); }
-      50% { transform: scale(1.02); box-shadow: 0 12px 36px rgba(167, 243, 208, 0.7); }
+    @keyframes pulseCockpit {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 20px rgba(252,211,77,0.3); }
+      50% { transform: scale(1.02); box-shadow: 0 12px 35px rgba(0,0,0,0.7), 0 0 35px rgba(252,211,77,0.6); }
     }
 
     .radar-tag {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
-      color: #E0E7FF;
+      color: #FDE047;
       text-transform: uppercase;
       letter-spacing: 1.5px;
       display: flex;
@@ -164,38 +146,37 @@
       font-size: 38px;
       color: #FFFFFF;
       letter-spacing: 2px;
-      text-shadow: 0 3px 6px rgba(0,0,0,0.4);
-      line-height: 1.2;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.7);
+      line-height: 1.15;
     }
 
     .hud-controls {
       display: flex;
-      gap: 10px;
+      gap: 8px;
     }
 
     .icon-btn {
-      background: var(--panel-bg);
-      backdrop-filter: blur(10px);
-      border: 2px solid var(--panel-border);
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(255, 255, 255, 0.25);
       border-radius: 50%;
-      width: 46px;
-      height: 46px;
+      width: 44px;
+      height: 44px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
       color: #FFFFFF;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
     }
     .icon-btn:hover {
       transform: scale(1.1);
       border-color: var(--accent-yellow);
-      background: rgba(251, 191, 36, 0.2);
+      background: rgba(251, 191, 36, 0.25);
     }
 
-    /* Combo & Fever Banner */
+    /* Combo Banner */
     .combo-banner {
       position: absolute;
       top: 110px;
@@ -214,7 +195,7 @@
     }
     .combo-text {
       font-family: var(--font-display);
-      font-size: 32px;
+      font-size: 30px;
       color: var(--accent-orange);
       text-shadow: 0 2px 12px rgba(249,115,22,0.8);
     }
@@ -222,7 +203,7 @@
       background: linear-gradient(90deg, #F59E0B, #EF4444);
       padding: 4px 12px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -231,27 +212,29 @@
     }
     @keyframes bounce {
       from { transform: translateY(0); }
-      to { transform: translateY(-5px); }
+      to { transform: translateY(-4px); }
     }
 
-    /* Target Quick Keys (Bottom-center bar for 1, 2, 3, 4 keys) */
-    .quick-keys-bar {
-      margin: 0 auto 12px auto;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 30px;
-      padding: 6px 18px;
+    /* Bottom Status Bar (Chicken Invaders Style) */
+    .ci-bottom-bar {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      gap: 14px;
+      background: rgba(10, 8, 30, 0.75);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 6px 20px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
       font-size: 13px;
       color: #94A3B8;
     }
     .key-badge {
-      background: #334155;
+      background: #1E293B;
       color: #F8FAFC;
-      border: 1px solid #64748B;
+      border: 1px solid #475569;
       padding: 2px 8px;
       border-radius: 6px;
       font-weight: 700;
@@ -259,14 +242,14 @@
       font-size: 12px;
     }
 
-    /* Modals & Dialogs (Start Screen, Victory, Settings, Import Excel) */
+    /* Modals & Dialogs */
     .modal-overlay {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(10, 15, 30, 0.85);
+      background: rgba(5, 3, 20, 0.88);
       backdrop-filter: blur(16px);
       display: flex;
       justify-content: center;
@@ -283,98 +266,110 @@
     }
 
     .modal-card {
-      background: linear-gradient(160deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
-      border: 2px solid rgba(148, 163, 184, 0.3);
+      background: linear-gradient(165deg, rgba(26, 16, 60, 0.96) 0%, rgba(10, 5, 30, 0.98) 100%);
+      border: 2px solid rgba(252, 211, 77, 0.4);
       border-radius: 28px;
       width: 100%;
-      max-width: 620px;
+      max-width: 640px;
       max-height: 90vh;
       overflow-y: auto;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(79, 70, 229, 0.2);
-      padding: 36px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 50px rgba(124, 58, 237, 0.3);
+      padding: 32px 28px;
       text-align: center;
       position: relative;
-      animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes modalSlide {
-      from { transform: translateY(30px) scale(0.95); }
-      to { transform: translateY(0) scale(1); }
     }
 
     .modal-title {
       font-family: var(--font-display);
-      font-size: 36px;
+      font-size: 34px;
       color: #FFFFFF;
-      margin-bottom: 8px;
-      text-shadow: 0 2px 10px rgba(255,255,255,0.2);
+      margin-bottom: 6px;
     }
     .modal-title span.highlight {
       color: var(--accent-yellow);
-      text-shadow: 0 2px 15px rgba(251, 191, 36, 0.6);
+      text-shadow: 0 2px 18px rgba(251, 191, 36, 0.8);
     }
     .modal-subtitle {
-      font-size: 15px;
-      color: #94A3B8;
-      margin-bottom: 24px;
+      font-size: 14px;
+      color: #A5B4FC;
+      margin-bottom: 20px;
       line-height: 1.5;
     }
 
-    /* Mode Selector Tabs/Grid */
+    /* Mode Grid */
     .mode-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-      margin-bottom: 24px;
+      gap: 12px;
+      margin-bottom: 20px;
     }
     @media (max-width: 500px) {
       .mode-grid { grid-template-columns: 1fr; }
     }
 
     .mode-btn {
-      background: rgba(51, 65, 85, 0.6);
-      border: 2px solid rgba(148, 163, 184, 0.2);
+      background: rgba(49, 46, 129, 0.4);
+      border: 2px solid rgba(165, 180, 252, 0.2);
       border-radius: 18px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       cursor: pointer;
       text-align: left;
       transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 4px;
     }
     .mode-btn:hover {
-      background: rgba(79, 70, 229, 0.25);
-      border-color: var(--primary-bright);
+      background: rgba(99, 102, 241, 0.3);
+      border-color: #818CF8;
       transform: translateY(-2px);
     }
     .mode-btn.active {
-      background: linear-gradient(135deg, rgba(79, 70, 229, 0.4) 0%, rgba(99, 102, 241, 0.3) 100%);
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.5) 0%, rgba(147, 51, 234, 0.4) 100%);
       border-color: var(--accent-yellow);
-      box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.35);
     }
-    .mode-btn .mode-icon {
-      font-size: 26px;
+    .mode-btn .mode-icon { font-size: 24px; }
+    .mode-btn .mode-name { font-weight: 800; font-size: 15px; color: #FFFFFF; }
+    .mode-btn .mode-desc { font-size: 11px; color: #94A3B8; line-height: 1.3; }
+
+    /* Enemy Wave Mode Switch (Gà & Khủng long) */
+    .enemy-theme-selector {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
     }
-    .mode-btn .mode-name {
+    .enemy-theme-btn {
+      background: rgba(30, 27, 75, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      padding: 8px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
       font-weight: 800;
-      font-size: 16px;
-      color: #FFFFFF;
+      color: #E2E8F0;
+      transition: all 0.2s;
     }
-    .mode-btn .mode-desc {
-      font-size: 12px;
-      color: #94A3B8;
-      line-height: 1.3;
+    .enemy-theme-btn:hover { border-color: #FBBF24; }
+    .enemy-theme-btn.active {
+      background: rgba(245, 158, 11, 0.2);
+      border-color: #F59E0B;
+      color: #FDE047;
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
     }
 
-    /* Action Buttons */
+    /* Buttons */
     .btn-row {
       display: flex;
       gap: 12px;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 18px;
       flex-wrap: wrap;
     }
-
     .btn-main {
       background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
       border: none;
@@ -382,7 +377,7 @@
       color: #FFFFFF;
       font-family: var(--font-display);
       font-size: 22px;
-      padding: 14px 44px;
+      padding: 12px 42px;
       cursor: pointer;
       box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5), inset 0 2px 4px rgba(255,255,255,0.4);
       transition: all 0.2s ease;
@@ -391,22 +386,18 @@
       gap: 10px;
     }
     .btn-main:hover {
-      transform: translateY(-3px) scale(1.03);
+      transform: translateY(-2px) scale(1.03);
       box-shadow: 0 12px 30px rgba(245, 158, 11, 0.7);
     }
-    .btn-main:active {
-      transform: translateY(0);
-    }
-
     .btn-secondary {
-      background: rgba(51, 65, 85, 0.8);
-      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(49, 46, 129, 0.6);
+      border: 1px solid rgba(165, 180, 252, 0.3);
       border-radius: 50px;
       color: #E2E8F0;
       font-family: var(--font-main);
       font-weight: 700;
-      font-size: 15px;
-      padding: 12px 24px;
+      font-size: 14px;
+      padding: 10px 22px;
       cursor: pointer;
       transition: all 0.2s ease;
       display: inline-flex;
@@ -414,14 +405,14 @@
       gap: 8px;
     }
     .btn-secondary:hover {
-      background: #475569;
+      background: #4338CA;
       color: #FFFFFF;
-      border-color: #94A3B8;
+      border-color: #818CF8;
     }
 
-    /* Excel Import Box */
+    /* Excel Dropzone */
     .excel-dropzone {
-      border: 2px dashed rgba(148, 163, 184, 0.4);
+      border: 2px dashed rgba(165, 180, 252, 0.4);
       border-radius: 20px;
       padding: 24px 16px;
       background: rgba(15, 23, 42, 0.5);
@@ -433,77 +424,36 @@
       border-color: var(--accent-green);
       background: rgba(16, 185, 129, 0.1);
     }
-    .excel-icon {
-      font-size: 40px;
-      color: var(--accent-green);
-      margin-bottom: 8px;
-    }
+    .excel-icon { font-size: 40px; color: var(--accent-green); margin-bottom: 6px; }
 
-    /* Ship Selector (Hangar) */
-    .ship-selector {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-      margin: 16px 0 24px 0;
-    }
-    .ship-option {
-      border: 2px solid rgba(148, 163, 184, 0.2);
-      border-radius: 16px;
-      padding: 10px 14px;
-      background: rgba(30, 41, 59, 0.6);
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-    .ship-option:hover {
-      border-color: var(--accent-yellow);
-      transform: translateY(-2px);
-    }
-    .ship-option.selected {
-      border-color: var(--accent-yellow);
-      background: rgba(251, 191, 36, 0.15);
-      box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
-    }
-    .ship-canvas-preview {
-      width: 48px;
-      height: 48px;
-    }
-    .ship-name {
-      font-size: 12px;
-      font-weight: 700;
-      color: #E2E8F0;
-    }
-
-    /* Victory & Review Screen */
+    /* Victory */
     .stars-rating {
       font-size: 44px;
-      margin: 10px 0;
+      margin: 8px 0;
       filter: drop-shadow(0 4px 10px rgba(251,191,36,0.6));
     }
     .stat-pills {
       display: flex;
       justify-content: center;
-      gap: 16px;
-      margin: 16px 0 24px 0;
+      gap: 14px;
+      margin: 14px 0 20px 0;
     }
     .stat-pill {
-      background: rgba(51, 65, 85, 0.5);
+      background: rgba(49, 46, 129, 0.4);
+      border: 1px solid rgba(255,255,255,0.1);
       border-radius: 14px;
-      padding: 10px 18px;
+      padding: 8px 16px;
       text-align: center;
     }
     .stat-pill .num {
       font-family: var(--font-display);
-      font-size: 26px;
+      font-size: 24px;
       color: var(--accent-yellow);
     }
     .stat-pill .lbl {
-      font-size: 11px;
-      color: #94A3B8;
-      font-weight: 700;
+      font-size: 10px;
+      color: #A5B4FC;
+      font-weight: 800;
       text-transform: uppercase;
     }
 
@@ -511,10 +461,10 @@
       text-align: left;
       max-height: 180px;
       overflow-y: auto;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(10, 8, 30, 0.6);
       border-radius: 14px;
       padding: 12px;
-      margin: 16px 0;
+      margin: 14px 0;
       border: 1px solid rgba(255,255,255,0.1);
     }
     .review-item {
@@ -531,28 +481,21 @@
     .review-item .ans-wrong { color: #EF4444; font-weight: 700; text-decoration: line-through; margin-right: 8px; }
     .review-hint { font-size: 11px; color: #38BDF8; margin-top: 2px; }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-    ::-webkit-scrollbar-thumb:hover { background: #64748B; }
-
-    /* Feedback Alert Toast (Awesome / Try again) */
+    /* Toast */
     .toast-feedback {
       position: absolute;
-      top: 35%;
+      top: 36%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0.5);
       font-family: var(--font-display);
-      font-size: 42px;
-      padding: 12px 36px;
+      font-size: 38px;
+      padding: 10px 32px;
       border-radius: 50px;
       color: #FFFFFF;
       pointer-events: none;
       opacity: 0;
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       z-index: 50;
-      text-align: center;
       white-space: nowrap;
     }
     .toast-feedback.show {
@@ -570,18 +513,17 @@
       border: 3px solid #FCA5A5;
     }
 
-    /* Boss Warning */
     .boss-warning {
       position: absolute;
       top: 45%;
       left: 0;
       width: 100%;
-      background: rgba(220, 38, 38, 0.85);
+      background: rgba(220, 38, 38, 0.88);
       color: #FFFFFF;
       font-family: var(--font-display);
       font-size: 32px;
       text-align: center;
-      padding: 16px 0;
+      padding: 14px 0;
       transform: scaleY(0);
       transition: transform 0.3s ease;
       z-index: 45;
@@ -605,12 +547,12 @@
     <div class="ui-layer">
       <!-- Top HUD -->
       <div class="hud-top">
-        <!-- Health & Score -->
-        <div class="hud-card">
-          <div class="hearts-container" id="heartsDisplay">❤️❤️❤️</div>
-          <div class="score-badge">
-            <span class="score-label">Điểm Số</span>
-            <span class="score-value" id="scoreDisplay">0</span>
+        <!-- Chicken Invaders Score Capsule -->
+        <div class="ci-score-capsule">
+          <div class="hearts-box" id="heartsDisplay">❤️❤️❤️</div>
+          <div style="display:flex; flex-direction:column;">
+            <span style="font-size: 10px; font-weight:800; color:#93C5FD; text-transform:uppercase;">Điểm Số</span>
+            <span class="ci-score-val" id="scoreDisplay">0</span>
           </div>
         </div>
 
@@ -622,11 +564,11 @@
           <div class="radar-question" id="mathQuestion">358 + 267 = ?</div>
         </div>
 
-        <!-- Controls & Wave count -->
-        <div class="hud-card">
-          <div class="score-badge" style="text-align: right; margin-right: 8px;">
-            <span class="score-label">Câu hỏi</span>
-            <span class="score-value" id="waveDisplay" style="color: #38BDF8;">1 / 10</span>
+        <!-- Wave Count & Audio -->
+        <div class="ci-score-capsule">
+          <div style="display:flex; flex-direction:column; text-align:right; margin-right:6px;">
+            <span style="font-size: 10px; font-weight:800; color:#93C5FD; text-transform:uppercase;">Màn Chơi</span>
+            <span class="ci-score-val" id="waveDisplay" style="color:#FDE047;">1 / 10</span>
           </div>
           <div class="hud-controls interactive">
             <button class="icon-btn" id="btnAudioToggle" title="Bật/Tắt Âm thanh">🔊</button>
@@ -641,9 +583,10 @@
         <div class="fever-badge" id="feverBadge">🔥 FEVER MODE x2 ĐIỂM!</div>
       </div>
 
-      <!-- Quick keys helper bar -->
-      <div class="quick-keys-bar interactive">
-        <span>🎮 <b>Cách lái:</b> Chuột hoặc phím <span class="key-badge">←</span> <span class="key-badge">→</span> | Bắn: <span class="key-badge">Cách (Space)</span> | Hoặc bấm <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span> <span class="key-badge">4</span> để phóng tên lửa tự tìm</span>
+      <!-- Bottom bar -->
+      <div class="ci-bottom-bar interactive">
+        <span>🐔 Lái máy bay: Chuột hoặc <span class="key-badge">←</span> <span class="key-badge">→</span> | Bắn: <span class="key-badge">Space</span> hoặc Phím số <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span> <span class="key-badge">4</span> để bắn tự tìm mục tiêu</span>
+        <span id="collectedDrumsticks" style="font-weight:800; color:#FBBF24;">🍗 x0 Đùi gà</span>
       </div>
     </div>
 
@@ -651,13 +594,27 @@
     <div class="toast-feedback" id="toastFeedback">CHÍNH XÁC! ⭐ +100</div>
 
     <!-- Boss Warning Banner -->
-    <div class="boss-warning" id="bossWarning">⚠️ CẢNH BÁO: TRÙM MA TRẬN XUẤT HIỆN! ⚠️</div>
+    <div class="boss-warning" id="bossWarning">⚠️ CẢNH BÁO: ĐẠI ĐẾ KHỦNG LONG BẠO CHÚA XUẤT HIỆN! ⚠️</div>
 
     <!-- MODAL 1: START SCREEN & MODE SELECT -->
     <div class="modal-overlay show" id="modalStart">
       <div class="modal-card">
-        <h1 class="modal-title">🚀 CHIẾN CƠ <span class="highlight">TOÁN HỌC</span></h1>
-        <p class="modal-subtitle">Vệ Binh Ngân Hà — Lái phi thuyền giải mã các phép tính kỳ bí!</p>
+        <h1 class="modal-title">🐔 CHIẾN CƠ <span class="highlight">TOÁN HỌC</span> 🦖</h1>
+        <p class="modal-subtitle">Bắn Gà & Khủng Long Không Gian — Rèn Luyện Tính Nhẩm Thần Tốc!</p>
+
+        <!-- Enemy Theme: Gà Không Gian hay Khủng Long? -->
+        <div style="font-size: 12px; font-weight: 800; color: #A5B4FC; text-transform: uppercase; margin-bottom: 6px;">Biệt Đội Kẻ Địch</div>
+        <div class="enemy-theme-selector">
+          <div class="enemy-theme-btn active" data-theme="mixed">
+            <span>🐔+🦖</span> Cả Gà & Khủng Long
+          </div>
+          <div class="enemy-theme-btn" data-theme="chicken">
+            <span>🐔</span> Đàn Gà Không Gian
+          </div>
+          <div class="enemy-theme-btn" data-theme="dino">
+            <span>🦖</span> Khủng Long Vũ Trụ
+          </div>
+        </div>
 
         <!-- Math Mode Selection -->
         <div class="mode-grid">
@@ -683,23 +640,6 @@
           </div>
         </div>
 
-        <!-- Ship Selection -->
-        <div style="font-size: 13px; font-weight: 700; color: #94A3B8; text-transform: uppercase; margin-bottom: 6px;">Chọn Phi Thuyền Của Bé</div>
-        <div class="ship-selector">
-          <div class="ship-option selected" data-ship="blue">
-            <canvas class="ship-canvas-preview" id="previewShipBlue" width="48" height="48"></canvas>
-            <span class="ship-name">Cá Voi Xanh</span>
-          </div>
-          <div class="ship-option" data-ship="red">
-            <canvas class="ship-canvas-preview" id="previewShipRed" width="48" height="48"></canvas>
-            <span class="ship-name">Phượng Hoàng Lửa</span>
-          </div>
-          <div class="ship-option" data-ship="gold">
-            <canvas class="ship-canvas-preview" id="previewShipGold" width="48" height="48"></canvas>
-            <span class="ship-name">Tia Chớp Vàng</span>
-          </div>
-        </div>
-
         <!-- Excel Custom Button -->
         <div class="btn-row">
           <button class="btn-secondary" id="btnOpenExcelModal">
@@ -707,9 +647,9 @@
           </button>
         </div>
 
-        <div class="btn-row" style="margin-top: 16px;">
+        <div class="btn-row" style="margin-top: 14px;">
           <button class="btn-main" id="btnStartGame">
-            <span>🚀</span> XUẤT KÍCH NGAY!
+            <span>🚀</span> BẮN GÀ XUẤT KÍCH!
           </button>
         </div>
       </div>
@@ -723,7 +663,7 @@
 
         <div class="excel-dropzone" id="excelDropzone">
           <div class="excel-icon">📁</div>
-          <div style="font-weight: 800; font-size: 16px; margin-bottom: 4px;">Kéo thả file Excel (.xlsx / .csv) vào đây</div>
+          <div style="font-weight: 800; font-size: 15px; margin-bottom: 4px;">Kéo thả file Excel (.xlsx / .csv) vào đây</div>
           <div style="font-size: 13px; color: #94A3B8;">hoặc click để chọn file từ máy tính</div>
           <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display: none;">
         </div>
@@ -748,7 +688,7 @@
       <div class="modal-card">
         <h2 class="modal-title" id="victoryTitle">🎉 CHIẾN CÔNG <span class="highlight">XUẤT SẮC!</span></h2>
         <div class="stars-rating" id="starsDisplay">⭐⭐⭐</div>
-        <p class="modal-subtitle" id="victorySubtitle">Bé đã xuất sắc hoàn thành xuất sắc đợt huấn luyện bay!</p>
+        <p class="modal-subtitle" id="victorySubtitle">Bé đã bắn hạ toàn bộ đội quân Gà & Khủng Long Vũ Trụ!</p>
 
         <div class="stat-pills">
           <div class="stat-pill">
@@ -760,13 +700,13 @@
             <div class="lbl">Độ Chính Xác</div>
           </div>
           <div class="stat-pill">
-            <div class="num" id="statMaxCombo">5</div>
-            <div class="lbl">Combo Tối Đa</div>
+            <div class="num" id="statDrumsticks">15</div>
+            <div class="lbl">Đùi Gà & Trứng</div>
           </div>
         </div>
 
         <!-- Mistakes review book -->
-        <div style="text-align: left; font-size: 13px; font-weight: 800; color: #94A3B8; text-transform: uppercase;">
+        <div style="text-align: left; font-size: 12px; font-weight: 800; color: #A5B4FC; text-transform: uppercase;">
           📖 Sổ Tay Ôn Tập (Chi tiết các câu hỏi)
         </div>
         <div class="review-list" id="reviewList">
@@ -787,7 +727,7 @@
 
   <script>
     /* ==========================================================================
-       1. WEB AUDIO SYNTHESIZER (100% Offline Sound Generator)
+       1. WEB AUDIO SYNTHESIZER (Offline Sound Generator)
        ========================================================================== */
     class SoundEngine {
       constructor() {
@@ -823,9 +763,7 @@
 
           osc.start();
           osc.stop(this.ctx.currentTime + duration);
-        } catch (e) {
-          console.error(e);
-        }
+        } catch (e) {}
       }
 
       playShoot() {
@@ -834,63 +772,88 @@
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'triangle';
-          osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.12);
+          osc.frequency.setValueAtTime(850, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(200, this.ctx.currentTime + 0.1);
 
           gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
 
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start();
-          osc.stop(this.ctx.currentTime + 0.12);
+          osc.stop(this.ctx.currentTime + 0.1);
         } catch(e){}
+      }
+
+      playChickenCluck() {
+        if (this.isMuted || !this.ctx) return;
+        // Funny chicken squawk
+        [400, 600, 350].forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 'sawtooth', 0.08, 0.15), i * 70);
+        });
+      }
+
+      playDinoRoar() {
+        if (this.isMuted || !this.ctx) return;
+        // Low cute dino growl
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, this.ctx.currentTime);
+          osc.frequency.linearRampToValueAtTime(90, this.ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.3);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.3);
+        } catch(e){}
+      }
+
+      playCollectFood() {
+        if (this.isMuted || !this.ctx) return;
+        // High crisp chime
+        this.playTone(987.77, 'sine', 0.1, 0.25);
+        setTimeout(() => this.playTone(1318.51, 'sine', 0.15, 0.25), 80);
       }
 
       playCorrect() {
         if (this.isMuted || !this.ctx) return;
-        // Joyful chord: C5 -> E5 -> G5 -> C6
         const notes = [523.25, 659.25, 783.99, 1046.50];
         notes.forEach((f, i) => {
-          setTimeout(() => {
-            this.playTone(f, 'sine', 0.25, 0.25);
-          }, i * 65);
+          setTimeout(() => this.playTone(f, 'sine', 0.22, 0.25), i * 60);
         });
       }
 
       playWrong() {
         if (this.isMuted || !this.ctx) return;
-        // Soft kid-friendly "boing"
         try {
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = 'sawtooth';
           osc.frequency.setValueAtTime(220, this.ctx.currentTime);
-          osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.25);
-
+          osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.22);
           gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
-
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.22);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start();
-          osc.stop(this.ctx.currentTime + 0.25);
+          osc.stop(this.ctx.currentTime + 0.22);
         } catch(e){}
       }
 
       playCombo() {
         if (this.isMuted || !this.ctx) return;
         [587.33, 739.99, 880, 1174.66].forEach((f, i) => {
-          setTimeout(() => this.playTone(f, 'triangle', 0.2, 0.22), i * 50);
+          setTimeout(() => this.playTone(f, 'triangle', 0.18, 0.22), i * 50);
         });
       }
 
       playBossWarning() {
         if (this.isMuted || !this.ctx) return;
         for (let i = 0; i < 3; i++) {
-          setTimeout(() => {
-            this.playTone(440, 'square', 0.15, 0.15);
-          }, i * 200);
+          setTimeout(() => this.playTone(320, 'square', 0.16, 0.2), i * 220);
         }
       }
 
@@ -906,14 +869,13 @@
     const sound = new SoundEngine();
 
     /* ==========================================================================
-       2. MATH ENGINE & SMART DISTRACTOR GENERATOR
+       2. MATH ENGINE & SMART DISTRACTORS
        ========================================================================== */
     class MathEngine {
       static randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
       }
 
-      // Generate 3-digit addition with carry (Có nhớ)
       static genAdditionWithCarry() {
         let a, b, sum;
         let hasCarry = false;
@@ -922,25 +884,19 @@
           attempts++;
           a = this.randomInt(150, 490);
           b = this.randomInt(150, 490);
-          // Check if carry exists at unit or tens place
           const unitCarry = (a % 10) + (b % 10) >= 10;
           const tensCarry = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10) + (unitCarry ? 1 : 0) >= 10;
-          if (unitCarry || tensCarry) {
-            hasCarry = true;
-          }
+          if (unitCarry || tensCarry) hasCarry = true;
         }
         sum = a + b;
-        const question = `${a} + ${b} = ?`;
-        const distractors = this.makeAdditionDistractors(a, b, sum);
         return {
-          question,
+          question: `${a} + ${b} = ?`,
           answer: sum,
-          options: this.shuffleOptions([sum, ...distractors]),
+          options: this.shuffleOptions([sum, ...this.makeAdditionDistractors(a, b, sum)]),
           hint: `Lưu ý nhớ 1 sang cột hàng bên cạnh khi tổng lớn hơn hoặc bằng 10!`
         };
       }
 
-      // Generate 3-digit subtraction with borrow (Có nhớ / mượn)
       static genSubtractionWithBorrow() {
         let a, b, diff;
         let hasBorrow = false;
@@ -951,22 +907,17 @@
           b = this.randomInt(120, a - 50);
           const unitBorrow = (a % 10) < (b % 10);
           const tensBorrow = (Math.floor(a / 10) % 10) < (Math.floor(b / 10) % 10);
-          if (unitBorrow || tensBorrow) {
-            hasBorrow = true;
-          }
+          if (unitBorrow || tensBorrow) hasBorrow = true;
         }
         diff = a - b;
-        const question = `${a} - ${b} = ?`;
-        const distractors = this.makeSubtractionDistractors(a, b, diff);
         return {
-          question,
+          question: `${a} - ${b} = ?`,
           answer: diff,
-          options: this.shuffleOptions([diff, ...distractors]),
+          options: this.shuffleOptions([diff, ...this.makeSubtractionDistractors(a, b, diff)]),
           hint: `Nhớ mượn 1 ở hàng trước đó và trả lại 1 nhé bé!`
         };
       }
 
-      // Multiplication & Division Times Tables (2 to 9)
       static genMultiplicationOrDivision() {
         const isDiv = Math.random() > 0.45;
         const num1 = this.randomInt(2, 9);
@@ -974,45 +925,35 @@
         const product = num1 * num2;
 
         if (isDiv) {
-          const distractors = this.makeDivDistractors(product, num1, num2);
           return {
             question: `${product} : ${num1} = ?`,
             answer: num2,
-            options: this.shuffleOptions([num2, ...distractors]),
+            options: this.shuffleOptions([num2, ...this.makeDivDistractors(product, num1, num2)]),
             hint: `Nhẩm xem số nào nhân với ${num1} bằng ${product} nhé!`
           };
         } else {
-          const distractors = this.makeMultDistractors(num1, num2, product);
           return {
             question: `${num1} × ${num2} = ?`,
             answer: product,
-            options: this.shuffleOptions([product, ...distractors]),
+            options: this.shuffleOptions([product, ...this.makeMultDistractors(num1, num2, product)]),
             hint: `Bảng nhân ${num1}: ${num1} nhân ${num2} bằng bao nhiêu?`
           };
         }
       }
 
-      // Smart distractors based on typical child calculation errors
       static makeAdditionDistractors(a, b, correct) {
         const set = new Set();
-        // Mistake 1: Forgot carry (off by 10)
         if (correct - 10 > 0) set.add(correct - 10);
-        // Mistake 2: Extra carry (off by +10)
         set.add(correct + 10);
-        // Mistake 3: Off by 1 in units
         set.add(correct + 1);
         set.add(correct - 1);
-        // Mistake 4: Off by 100
         if (correct - 100 > 0) set.add(correct - 100);
-
         return Array.from(set).filter(n => n !== correct).slice(0, 3);
       }
 
       static makeSubtractionDistractors(a, b, correct) {
         const set = new Set();
-        // Forget to subtract the borrowed 1
         set.add(correct + 10);
-        // Subtract smaller from bigger directly without borrowing
         if (correct - 10 > 0) set.add(correct - 10);
         set.add(correct + 1);
         set.add(correct - 1);
@@ -1021,7 +962,6 @@
 
       static makeMultDistractors(n1, n2, correct) {
         const set = new Set();
-        // Adjacent in times table
         if (correct - n1 > 0) set.add(correct - n1);
         set.add(correct + n1);
         if (correct - n2 > 0) set.add(correct - n2);
@@ -1050,13 +990,11 @@
 
       static getQuestionByMode(mode, customQuestions = []) {
         if (mode === 'custom_excel' && customQuestions.length > 0) {
-          const q = customQuestions.shift();
-          return q;
+          return customQuestions.shift();
         }
         if (mode === 'add_carry') return this.genAdditionWithCarry();
         if (mode === 'sub_borrow') return this.genSubtractionWithBorrow();
         if (mode === 'multi_div') return this.genMultiplicationOrDivision();
-        // mixed_challenge
         const r = Math.random();
         if (r < 0.35) return this.genAdditionWithCarry();
         if (r < 0.7) return this.genSubtractionWithBorrow();
@@ -1065,176 +1003,375 @@
     }
 
     /* ==========================================================================
-       3. CANVAS DRAWING UTILITIES (Cute Chibi Ships, Enemies, Lasers & FX)
+       3. CANVAS RENDERER: CHICKEN INVADERS SHIP, CHICKENS & SPACE DINOSAURS
        ========================================================================== */
     class DrawHelper {
-      static drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, color) {
-        let rot = Math.PI / 2 * 3;
-        let x = cx;
-        let y = cy;
-        const step = Math.PI / spikes;
-
-        ctx.save();
-        ctx.beginPath();
-        ctx.moveTo(cx, cy - outerRadius);
-        for (let i = 0; i < spikes; i++) {
-          x = cx + Math.cos(rot) * outerRadius;
-          y = cy + Math.sin(rot) * outerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-
-          x = cx + Math.cos(rot) * innerRadius;
-          y = cy + Math.sin(rot) * innerRadius;
-          ctx.lineTo(x, y);
-          rot += step;
-        }
-        ctx.lineTo(cx, cy - outerRadius);
-        ctx.closePath();
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // Draw Kid-friendly Player Fighter
-      static drawPlayerShip(ctx, x, y, width, height, shipType = 'blue', isFever = false) {
+      // 1. CHICKEN INVADERS CLASSIC FIGHTER (Exact match to screenshot)
+      static drawChickenInvadersShip(ctx, x, y, width, height, isFever = false) {
         ctx.save();
         ctx.translate(x, y);
 
-        // Thruster flame particles
-        const flameColor = isFever ? '#F59E0B' : (shipType === 'red' ? '#EF4444' : '#06B6D4');
+        // Ion blue thrust plasma flame
+        const flameH = 24 + Math.random() * 12;
+        const grad = ctx.createLinearGradient(0, height * 0.4, 0, height * 0.4 + flameH);
+        grad.addColorStop(0, '#67E8F9');
+        grad.addColorStop(0.5, '#3B82F6');
+        grad.addColorStop(1, 'rgba(59, 130, 246, 0)');
         ctx.beginPath();
-        ctx.moveTo(-width * 0.25, height * 0.4);
-        ctx.lineTo(0, height * 0.4 + 16 + Math.random() * 8);
-        ctx.lineTo(width * 0.25, height * 0.4);
-        ctx.fillStyle = flameColor;
-        ctx.shadowColor = flameColor;
-        ctx.shadowBlur = 12;
+        ctx.moveTo(-width * 0.14, height * 0.4);
+        ctx.lineTo(0, height * 0.4 + flameH);
+        ctx.lineTo(width * 0.14, height * 0.4);
+        ctx.fillStyle = grad;
+        ctx.shadowColor = '#38BDF8';
+        ctx.shadowBlur = 15;
         ctx.fill();
 
-        // Hull Colors
-        let primaryColor = isFever ? '#FBBF24' : (shipType === 'red' ? '#F43F5E' : (shipType === 'gold' ? '#F59E0B' : '#3B82F6'));
-        let secondaryColor = isFever ? '#FEF08A' : (shipType === 'red' ? '#FDA4AF' : (shipType === 'gold' ? '#FDE68A' : '#93C5FD'));
-
-        // Wings
+        // Distinct Crescent Wings of Chicken Invaders ship
+        ctx.shadowBlur = 0;
         ctx.beginPath();
-        ctx.moveTo(0, -height * 0.3);
-        ctx.lineTo(-width * 0.5, height * 0.3);
-        ctx.lineTo(-width * 0.2, height * 0.35);
-        ctx.lineTo(0, height * 0.25);
-        ctx.lineTo(width * 0.2, height * 0.35);
-        ctx.lineTo(width * 0.5, height * 0.3);
+        // Lower crescent wing arch
+        ctx.moveTo(-width * 0.48, height * 0.4);
+        ctx.quadraticCurveTo(0, height * 0.1, width * 0.48, height * 0.4);
+        ctx.lineTo(width * 0.38, height * 0.15);
+        ctx.quadraticCurveTo(0, -height * 0.05, -width * 0.38, height * 0.15);
         ctx.closePath();
-        ctx.fillStyle = secondaryColor;
+        ctx.fillStyle = isFever ? '#FBBF24' : '#94A3B8';
         ctx.fill();
-
-        // Fuselage Body
-        ctx.beginPath();
-        ctx.ellipse(0, 0, width * 0.28, height * 0.45, 0, 0, Math.PI * 2);
-        ctx.fillStyle = primaryColor;
-        ctx.fill();
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#CBD5E1';
+        ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Cockpit Glass (Cute Bubble)
+        // Main Fuselage (Silver grey with cockpit pod)
         ctx.beginPath();
-        ctx.ellipse(0, -height * 0.1, width * 0.16, height * 0.22, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#E0F2FE';
+        ctx.moveTo(0, -height * 0.5);
+        ctx.lineTo(width * 0.22, height * 0.25);
+        ctx.lineTo(0, height * 0.15);
+        ctx.lineTo(-width * 0.22, height * 0.25);
+        ctx.closePath();
+        ctx.fillStyle = isFever ? '#FEF08A' : '#F1F5F9';
         ctx.fill();
+        ctx.strokeStyle = '#64748B';
+        ctx.lineWidth = 1.8;
+        ctx.stroke();
 
-        // Cute pilot eyes inside cockpit
-        ctx.fillStyle = '#0F172A';
+        // Cockpit dome (Cyan glow bubble)
         ctx.beginPath();
-        ctx.arc(-width * 0.06, -height * 0.12, 3, 0, Math.PI * 2);
-        ctx.arc(width * 0.06, -height * 0.12, 3, 0, Math.PI * 2);
+        ctx.ellipse(0, -height * 0.1, width * 0.1, height * 0.16, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#06B6D4';
         ctx.fill();
-
-        // Cute smile
-        ctx.beginPath();
-        ctx.arc(0, -height * 0.07, 4, 0, Math.PI);
-        ctx.strokeStyle = '#0F172A';
+        ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
-        // Glowing shield if in Fever mode
+        // Dual Laser Cannon Pods on wingtips
+        [-width * 0.45, width * 0.45].forEach(cx => {
+          ctx.beginPath();
+          ctx.rect(cx - 3, height * 0.2, 6, 12);
+          ctx.fillStyle = '#DC2626';
+          ctx.fill();
+        });
+
+        // Fever glow
         if (isFever) {
           ctx.beginPath();
-          ctx.arc(0, 0, width * 0.6, 0, Math.PI * 2);
+          ctx.arc(0, 0, width * 0.55, 0, Math.PI * 2);
           ctx.strokeStyle = '#FDE047';
           ctx.lineWidth = 3;
-          ctx.shadowColor = '#FDE047';
-          ctx.shadowBlur = 15;
+          ctx.shadowColor = '#FBBF24';
+          ctx.shadowBlur = 18;
           ctx.stroke();
         }
 
         ctx.restore();
       }
 
-      // Draw UFO Enemy with number badge
-      static drawAlienEnemy(ctx, enemy) {
-        const { x, y, width, height, value, isTarget, skinType } = enemy;
+      // 2. SPACE CHICKEN (Exact match to Chicken Invaders screenshot)
+      static drawChicken(ctx, enemy, time) {
+        const { x, y, width, height, value, slotNumber } = enemy;
         ctx.save();
         ctx.translate(x, y);
 
-        // Hover float vibration
-        const hover = Math.sin(Date.now() / 150 + enemy.id) * 3;
-        ctx.translate(0, hover);
+        // Flapping wings animation
+        const flap = Math.sin(time * 0.015 + enemy.id * 5) * 0.25;
 
-        // Colors per enemy type
-        const colors = [
-          { dome: '#C084FC', body: '#7C3AED', glow: '#A855F7' },
-          { dome: '#67E8F9', body: '#0891B2', glow: '#06B6D4' },
-          { dome: '#FDE047', body: '#D97706', glow: '#F59E0B' },
-          { dome: '#F472B6', body: '#DB2777', glow: '#EC4899' },
-        ];
-        const c = colors[skinType % colors.length];
+        // Feet (Orange/Yellow)
+        ctx.fillStyle = '#F97316';
+        [-width * 0.18, width * 0.18].forEach(fx => {
+          ctx.beginPath();
+          ctx.ellipse(fx, height * 0.35, 7, 4, 0, 0, Math.PI * 2);
+          ctx.fill();
+        });
 
-        // Thruster light under saucer
+        // Left Wing (White feathers, spread outwards)
+        ctx.save();
+        ctx.translate(-width * 0.25, -height * 0.05);
+        ctx.rotate(-0.3 + flap);
+        this.drawChickenWingFeathers(ctx, -1);
+        ctx.restore();
+
+        // Right Wing (White feathers, spread outwards)
+        ctx.save();
+        ctx.translate(width * 0.25, -height * 0.05);
+        ctx.rotate(0.3 - flap);
+        this.drawChickenWingFeathers(ctx, 1);
+        ctx.restore();
+
+        // Red Round Body (Iconic red body of Chicken Invaders)
         ctx.beginPath();
-        ctx.ellipse(0, height * 0.35, width * 0.25, height * 0.12, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#FEF08A';
-        ctx.shadowColor = '#FEF08A';
-        ctx.shadowBlur = 10;
+        ctx.ellipse(0, height * 0.05, width * 0.34, height * 0.34, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#DC2626';
         ctx.fill();
-
-        // Saucer Metal Disc Body
-        ctx.beginPath();
-        ctx.ellipse(0, height * 0.1, width * 0.48, height * 0.28, 0, 0, Math.PI * 2);
-        ctx.fillStyle = c.body;
-        ctx.fill();
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 2.5;
+        ctx.strokeStyle = '#991B1B';
+        ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Glass Dome
+        // Head
         ctx.beginPath();
-        ctx.ellipse(0, -height * 0.15, width * 0.32, height * 0.32, 0, Math.PI, 0);
-        ctx.fillStyle = c.dome;
+        ctx.arc(0, -height * 0.28, width * 0.18, 0, Math.PI * 2);
+        ctx.fillStyle = '#DC2626';
         ctx.fill();
-        ctx.stroke();
 
-        // Cute alien eyes
+        // Red Comb on Top
+        ctx.fillStyle = '#EF4444';
+        ctx.beginPath();
+        ctx.arc(-4, -height * 0.44, 4.5, 0, Math.PI * 2);
+        ctx.arc(0, -height * 0.48, 5.5, 0, Math.PI * 2);
+        ctx.arc(4, -height * 0.44, 4.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cute Big Chicken Eyes
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
-        ctx.arc(-width * 0.1, -height * 0.16, 6, 0, Math.PI * 2);
-        ctx.arc(width * 0.1, -height * 0.16, 6, 0, Math.PI * 2);
+        ctx.arc(-5, -height * 0.3, 5, 0, Math.PI * 2);
+        ctx.arc(5, -height * 0.3, 5, 0, Math.PI * 2);
         ctx.fill();
         ctx.fillStyle = '#0F172A';
         ctx.beginPath();
-        ctx.arc(-width * 0.08, -height * 0.16, 3, 0, Math.PI * 2);
-        ctx.arc(width * 0.12, -height * 0.16, 3, 0, Math.PI * 2);
+        ctx.arc(-4, -height * 0.3, 2.5, 0, Math.PI * 2);
+        ctx.arc(6, -height * 0.3, 2.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Answer Value Signboard (Big, super clear for children)
-        const badgeW = width * 0.78;
+        // Yellow Beak
+        ctx.fillStyle = '#FBBF24';
+        ctx.beginPath();
+        ctx.moveTo(-4, -height * 0.24);
+        ctx.lineTo(4, -height * 0.24);
+        ctx.lineTo(0, -height * 0.16);
+        ctx.closePath();
+        ctx.fill();
+
+        // Big Clear Math Answer Badge on Chicken Belly
+        this.drawAnswerBadge(ctx, width, height, value, slotNumber);
+
+        ctx.restore();
+      }
+
+      static drawChickenWingFeathers(ctx, dir) {
+        ctx.fillStyle = '#F8FAFC';
+        ctx.strokeStyle = '#CBD5E1';
+        ctx.lineWidth = 1.5;
+
+        // 3 layers of white feathers
+        const angles = [-0.3, 0, 0.3];
+        angles.forEach((ang) => {
+          ctx.save();
+          ctx.rotate(ang);
+          ctx.beginPath();
+          ctx.ellipse(dir * 18, 0, 18, 6, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+        });
+      }
+
+      // 3. SPACE DINOSAUR (Khủng Long Không Gian Chibi Cute)
+      static drawDinosaur(ctx, enemy, time) {
+        const { x, y, width, height, value, slotNumber } = enemy;
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Gentle hover float
+        const bob = Math.sin(time * 0.01 + enemy.id * 3) * 3;
+        ctx.translate(0, bob);
+
+        // Dino Body (Chibi Green T-Rex)
+        ctx.fillStyle = '#10B981';
+        ctx.beginPath();
+        ctx.ellipse(0, height * 0.05, width * 0.35, height * 0.36, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#047857';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Dino Tail
+        ctx.beginPath();
+        ctx.moveTo(width * 0.2, height * 0.15);
+        ctx.quadraticCurveTo(width * 0.5, height * 0.2, width * 0.45, -height * 0.05);
+        ctx.lineTo(width * 0.25, 0);
+        ctx.fillStyle = '#10B981';
+        ctx.fill();
+
+        // Dino Back Spikes (Vảy lưng khủng long vàng/cam)
+        ctx.fillStyle = '#F59E0B';
+        [-12, -4, 4, 12].forEach((offsetY) => {
+          ctx.beginPath();
+          ctx.moveTo(-width * 0.32, offsetY);
+          ctx.lineTo(-width * 0.44, offsetY + 3);
+          ctx.lineTo(-width * 0.32, offsetY + 6);
+          ctx.fill();
+        });
+
+        // Astronaut Helmet (Bubble Glass for space dino)
+        ctx.beginPath();
+        ctx.arc(0, -height * 0.24, width * 0.24, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(186, 230, 253, 0.4)';
+        ctx.fill();
+        ctx.strokeStyle = '#38BDF8';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Cute Big Dino Head inside Helmet
+        ctx.beginPath();
+        ctx.arc(0, -height * 0.24, width * 0.18, 0, Math.PI * 2);
+        ctx.fillStyle = '#10B981';
+        ctx.fill();
+
+        // Cute Dino Eyes
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(-5, -height * 0.26, 6, 0, Math.PI * 2);
+        ctx.arc(5, -height * 0.26, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#0F172A';
+        ctx.beginPath();
+        ctx.arc(-4, -height * 0.26, 3, 0, Math.PI * 2);
+        ctx.arc(6, -height * 0.26, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tiny cute T-Rex teeth & smile
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.moveTo(-3, -height * 0.18);
+        ctx.lineTo(-1, -height * 0.14);
+        ctx.lineTo(1, -height * 0.18);
+        ctx.lineTo(3, -height * 0.14);
+        ctx.lineTo(5, -height * 0.18);
+        ctx.fill();
+
+        // Tiny cute green hands
+        ctx.fillStyle = '#059669';
+        [-width * 0.15, width * 0.15].forEach(hx => {
+          ctx.beginPath();
+          ctx.arc(hx, height * 0.05, 5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        // Answer Badge on Dinosaur Belly
+        this.drawAnswerBadge(ctx, width, height, value, slotNumber, '#10B981');
+
+        ctx.restore();
+      }
+
+      // 4. GIANT T-REX & CHICKEN BOSS (Màn Đấu Trùm)
+      static drawBoss(ctx, boss, time) {
+        const { x, y, width, height, hp, maxHp, bossType } = boss;
+        ctx.save();
+        ctx.translate(x, y);
+
+        if (bossType === 'dino') {
+          // GIANT MECHA T-REX BOSS
+          ctx.beginPath();
+          ctx.ellipse(0, 0, width * 0.44, height * 0.38, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#065F46';
+          ctx.fill();
+          ctx.strokeStyle = '#FBBF24';
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          // Giant Horns / Spikes
+          ctx.fillStyle = '#EF4444';
+          [-width * 0.28, 0, width * 0.28].forEach(sx => {
+            ctx.beginPath();
+            ctx.moveTo(sx - 10, -height * 0.3);
+            ctx.lineTo(sx, -height * 0.55);
+            ctx.lineTo(sx + 10, -height * 0.3);
+            ctx.fill();
+          });
+
+          // Fierce Cute Eyes
+          ctx.fillStyle = '#FDE047';
+          ctx.beginPath();
+          ctx.arc(-width * 0.16, -height * 0.05, 14, 0, Math.PI * 2);
+          ctx.arc(width * 0.16, -height * 0.05, 14, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#DC2626';
+          ctx.beginPath();
+          ctx.arc(-width * 0.16, -height * 0.05, 7, 0, Math.PI * 2);
+          ctx.arc(width * 0.16, -height * 0.05, 7, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // GIANT MOTHER CHICKEN BOSS
+          ctx.beginPath();
+          ctx.ellipse(0, 0, width * 0.44, height * 0.38, 0, 0, Math.PI * 2);
+          ctx.fillStyle = '#B91C1C';
+          ctx.fill();
+          ctx.strokeStyle = '#FDE047';
+          ctx.lineWidth = 4;
+          ctx.stroke();
+
+          // Golden Crown
+          ctx.fillStyle = '#F59E0B';
+          ctx.beginPath();
+          ctx.moveTo(-width * 0.2, -height * 0.32);
+          ctx.lineTo(-width * 0.25, -height * 0.52);
+          ctx.lineTo(-width * 0.1, -height * 0.4);
+          ctx.lineTo(0, -height * 0.58);
+          ctx.lineTo(width * 0.1, -height * 0.4);
+          ctx.lineTo(width * 0.25, -height * 0.52);
+          ctx.lineTo(width * 0.2, -height * 0.32);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+
+          // Boss Eyes
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(-width * 0.15, -height * 0.05, 15, 0, Math.PI * 2);
+          ctx.arc(width * 0.15, -height * 0.05, 15, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#0F172A';
+          ctx.beginPath();
+          ctx.arc(-width * 0.13, -height * 0.05, 7, 0, Math.PI * 2);
+          ctx.arc(width * 0.17, -height * 0.05, 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Boss Health Bar
+        const barW = width * 0.8;
+        const barH = 14;
+        ctx.fillStyle = '#0F172A';
+        ctx.fillRect(-barW / 2, -height * 0.62, barW, barH);
+        ctx.fillStyle = '#EF4444';
+        const healthPercent = Math.max(0, hp / maxHp);
+        ctx.fillRect(-barW / 2, -height * 0.62, barW * healthPercent, barH);
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(-barW / 2, -height * 0.62, barW, barH);
+
+        ctx.restore();
+      }
+
+      // Shared Helper: Clear Big Number Badge on belly
+      static drawAnswerBadge(ctx, width, height, value, slotNumber, strokeColor = '#FBBF24') {
+        const badgeW = width * 0.76;
         const badgeH = 34;
-        const badgeY = height * 0.36;
+        const badgeY = height * 0.34;
 
         ctx.beginPath();
         ctx.roundRect(-badgeW / 2, badgeY, badgeW, badgeH, 10);
         ctx.fillStyle = '#0F172A';
         ctx.fill();
-        ctx.strokeStyle = '#FDE047';
+        ctx.strokeStyle = strokeColor;
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
@@ -1244,94 +1381,66 @@
         ctx.textBaseline = 'middle';
         ctx.fillText(value, 0, badgeY + badgeH / 2);
 
-        // Label Tag [1, 2, 3, 4] for quick hotkey firing
-        if (enemy.slotNumber) {
+        // Quick Key Slot Pill (1, 2, 3, 4)
+        if (slotNumber) {
           ctx.beginPath();
           ctx.arc(-badgeW / 2 + 2, badgeY + 2, 9, 0, Math.PI * 2);
           ctx.fillStyle = '#EF4444';
           ctx.fill();
           ctx.fillStyle = '#FFFFFF';
           ctx.font = "bold 11px monospace";
-          ctx.fillText(enemy.slotNumber, -badgeW / 2 + 2, badgeY + 3);
+          ctx.fillText(slotNumber, -badgeW / 2 + 2, badgeY + 3);
         }
-
-        ctx.restore();
       }
 
-      // Draw Boss "Tiến Sĩ Glitch-Bot"
-      static drawBoss(ctx, boss) {
-        const { x, y, width, height, hp, maxHp } = boss;
+      // 5. Chicken Invaders Falling Drumsticks & Golden Eggs
+      static drawFallingFood(ctx, food) {
+        const { x, y, type } = food;
         ctx.save();
         ctx.translate(x, y);
 
-        // Huge Robot Skull / Matrix Ship
-        ctx.beginPath();
-        ctx.ellipse(0, 0, width * 0.45, height * 0.35, 0, 0, Math.PI * 2);
-        ctx.fillStyle = '#4C1D95';
-        ctx.fill();
-        ctx.strokeStyle = '#F43F5E';
-        ctx.lineWidth = 4;
-        ctx.stroke();
-
-        // Boss Horns / Antennas
-        ctx.fillStyle = '#EF4444';
-        ctx.beginPath();
-        ctx.moveTo(-width * 0.3, -height * 0.25);
-        ctx.lineTo(-width * 0.45, -height * 0.55);
-        ctx.lineTo(-width * 0.2, -height * 0.3);
-        ctx.fill();
-
-        ctx.beginPath();
-        ctx.moveTo(width * 0.3, -height * 0.25);
-        ctx.lineTo(width * 0.45, -height * 0.55);
-        ctx.lineTo(width * 0.2, -height * 0.3);
-        ctx.fill();
-
-        // Evil Cute Eyes
-        ctx.fillStyle = '#FBBF24';
-        ctx.beginPath();
-        ctx.arc(-width * 0.16, -height * 0.05, 14, 0, Math.PI * 2);
-        ctx.arc(width * 0.16, -height * 0.05, 14, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.fillStyle = '#DC2626';
-        ctx.beginPath();
-        ctx.arc(-width * 0.16, -height * 0.05, 7, 0, Math.PI * 2);
-        ctx.arc(width * 0.16, -height * 0.05, 7, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Boss Health Bar on top
-        const barW = width * 0.8;
-        const barH = 12;
-        ctx.fillStyle = '#1E293B';
-        ctx.fillRect(-barW / 2, -height * 0.6, barW, barH);
-        ctx.fillStyle = '#EF4444';
-        const healthPercent = Math.max(0, hp / maxHp);
-        ctx.fillRect(-barW / 2, -height * 0.6, barW * healthPercent, barH);
-        ctx.strokeStyle = '#FFFFFF';
-        ctx.lineWidth = 1.5;
-        ctx.strokeRect(-barW / 2, -height * 0.6, barW, barH);
+        if (type === 'drumstick') {
+          // Roasted chicken drumstick
+          ctx.fillStyle = '#D97706';
+          ctx.beginPath();
+          ctx.ellipse(-2, -2, 12, 8, -Math.PI / 4, 0, Math.PI * 2);
+          ctx.fill();
+          // Bone
+          ctx.fillStyle = '#F8FAFC';
+          ctx.fillRect(4, 4, 10, 4);
+          ctx.beginPath();
+          ctx.arc(14, 3, 3, 0, Math.PI * 2);
+          ctx.arc(14, 9, 3, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Golden egg
+          ctx.fillStyle = '#FBBF24';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 9, 13, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = '#F59E0B';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
 
         ctx.restore();
       }
     }
 
     /* ==========================================================================
-       4. MAIN GAME STATE & ENGINE
+       4. GAME ENGINE
        ========================================================================== */
     class Game {
       constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
 
-        // Sizing
         this.width = window.innerWidth;
         this.height = window.innerHeight;
 
-        // Game Settings & State
-        this.state = 'MENU'; // 'MENU', 'PLAYING', 'PAUSED', 'VICTORY', 'GAMEOVER'
+        this.state = 'MENU';
         this.mathMode = 'add_carry';
-        this.shipType = 'blue';
+        this.enemyTheme = 'mixed'; // 'mixed', 'chicken', 'dino'
         this.customExcelQuestions = [];
 
         // Player Stats
@@ -1339,24 +1448,27 @@
           x: this.width / 2,
           y: this.height - 120,
           targetX: this.width / 2,
-          width: 64,
-          height: 64,
-          speed: 9,
+          width: 68,
+          height: 68,
+          speed: 10,
           hearts: 3,
           maxHearts: 3,
           score: 0,
           combo: 0,
           maxCombo: 0,
+          drumsticks: 0,
           fever: false,
           feverTimer: 0
         };
 
         // Entities
+        this.nebulaClouds = [];
         this.stars = [];
         this.enemies = [];
         this.bullets = [];
         this.particles = [];
         this.floatingTexts = [];
+        this.fallingFoods = [];
         this.boss = null;
 
         // Math Flow
@@ -1365,23 +1477,20 @@
         this.totalWaves = 10;
         this.historyAnswers = [];
 
-        // Screen Shake
+        // Shake
         this.shakeTimer = 0;
         this.shakeIntensity = 0;
 
-        // Inputs
+        // Input
         this.keys = {};
         this.mouseX = this.width / 2;
         this.isPointerDown = false;
         this.lastShotTime = 0;
 
-        // Bindings & Setup
         this.bindEvents();
         this.resize();
-        this.initStarfield();
-        this.renderPreviewShips();
+        this.initDeepSpaceCosmicDust();
 
-        // Start animation loop
         requestAnimationFrame((ts) => this.loop(ts));
       }
 
@@ -1396,15 +1505,33 @@
         }
       }
 
-      initStarfield() {
+      // Create Chicken Invaders Deep Space Glowing Nebula Background
+      initDeepSpaceCosmicDust() {
+        this.nebulaClouds = [];
+        const nebulaColors = [
+          'rgba(147, 51, 234, 0.25)', // Purple
+          'rgba(236, 72, 153, 0.22)', // Pink
+          'rgba(79, 70, 229, 0.28)',  // Deep Indigo
+          'rgba(59, 130, 246, 0.2)'   // Blue
+        ];
+        for (let i = 0; i < 9; i++) {
+          this.nebulaClouds.push({
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+            radius: Math.random() * 180 + 120,
+            color: nebulaColors[i % nebulaColors.length],
+            speedY: Math.random() * 0.4 + 0.2
+          });
+        }
+
         this.stars = [];
-        for (let i = 0; i < 110; i++) {
+        for (let i = 0; i < 120; i++) {
           this.stars.push({
             x: Math.random() * this.width,
             y: Math.random() * this.height,
             size: Math.random() * 2.5 + 1,
             speed: Math.random() * 1.5 + 0.5,
-            color: ['#FFFFFF', '#E0F2FE', '#FDE047', '#C084FC'][Math.floor(Math.random() * 4)]
+            color: ['#FFFFFF', '#E0F2FE', '#FDE047', '#F472B6', '#C084FC'][Math.floor(Math.random() * 5)]
           });
         }
       }
@@ -1412,14 +1539,12 @@
       bindEvents() {
         window.addEventListener('resize', () => this.resize());
 
-        // Keyboard
         window.addEventListener('keydown', (e) => {
           this.keys[e.key] = true;
           if (e.key === ' ' || e.code === 'Space') {
             e.preventDefault();
             this.shoot();
           }
-          // Quick Target Keys 1, 2, 3, 4
           if (['1', '2', '3', '4'].includes(e.key)) {
             this.smartShootSlot(parseInt(e.key));
           }
@@ -1431,7 +1556,6 @@
           this.keys[e.key] = false;
         });
 
-        // Mouse & Touch
         this.canvas.addEventListener('pointermove', (e) => {
           this.mouseX = e.clientX;
           this.player.targetX = e.clientX;
@@ -1447,7 +1571,6 @@
           this.isPointerDown = false;
         });
 
-        // HUD Controls
         document.getElementById('btnAudioToggle').addEventListener('click', () => {
           sound.init();
           sound.isMuted = !sound.isMuted;
@@ -1458,7 +1581,18 @@
           this.togglePause();
         });
 
-        // Mode Select buttons
+        // Theme buttons (Chicken / Dino / Mixed)
+        document.querySelectorAll('.enemy-theme-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            sound.init();
+            sound.playTone(500, 'sine', 0.08);
+            document.querySelectorAll('.enemy-theme-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.enemyTheme = btn.dataset.theme;
+          });
+        });
+
+        // Mode Select
         document.querySelectorAll('.mode-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             sound.init();
@@ -1469,24 +1603,11 @@
           });
         });
 
-        // Ship Select buttons
-        document.querySelectorAll('.ship-option').forEach(opt => {
-          opt.addEventListener('click', () => {
-            sound.init();
-            sound.playTone(550, 'sine', 0.08);
-            document.querySelectorAll('.ship-option').forEach(o => o.classList.remove('selected'));
-            opt.classList.add('selected');
-            this.shipType = opt.dataset.ship;
-          });
-        });
-
-        // Start Button
         document.getElementById('btnStartGame').addEventListener('click', () => {
           sound.init();
           this.startNewGame();
         });
 
-        // Play Again & Home
         document.getElementById('btnPlayAgain').addEventListener('click', () => {
           this.startNewGame();
         });
@@ -1506,10 +1627,8 @@
           modalExcel.classList.remove('show');
         });
 
-        // Excel Dropzone & Input
         const dropzone = document.getElementById('excelDropzone');
         const fileInput = document.getElementById('excelFileInput');
-
         dropzone.addEventListener('click', () => fileInput.click());
         dropzone.addEventListener('dragover', (e) => {
           e.preventDefault();
@@ -1529,29 +1648,17 @@
           }
         });
 
-        // Download Template
         document.getElementById('btnDownloadTemplate').addEventListener('click', () => {
           this.downloadExcelTemplate();
         });
       }
 
-      renderPreviewShips() {
-        ['blue', 'red', 'gold'].forEach(color => {
-          const cvs = document.getElementById('previewShip' + color.charAt(0).toUpperCase() + color.slice(1));
-          if (cvs) {
-            const c = cvs.getContext('2d');
-            c.clearRect(0, 0, 48, 48);
-            DrawHelper.drawPlayerShip(c, 24, 24, 38, 38, color, false);
-          }
-        });
-      }
-
       startNewGame() {
-        // Reset state
         this.player.hearts = 3;
         this.player.score = 0;
         this.player.combo = 0;
         this.player.maxCombo = 0;
+        this.player.drumsticks = 0;
         this.player.fever = false;
         this.player.feverTimer = 0;
         this.wave = 1;
@@ -1560,17 +1667,14 @@
         this.bullets = [];
         this.particles = [];
         this.floatingTexts = [];
+        this.fallingFoods = [];
         this.boss = null;
 
-        // Hide modals
         document.getElementById('modalStart').classList.remove('show');
         document.getElementById('modalExcel').classList.remove('show');
         document.getElementById('modalVictory').classList.remove('show');
 
-        // Update HUD
         this.updateHUD();
-
-        // Start Playing
         this.state = 'PLAYING';
         this.spawnWave();
       }
@@ -1579,81 +1683,96 @@
         this.bullets = [];
         this.enemies = [];
 
-        // Check if wave is Boss Wave (every 10th wave or final wave)
         if (this.wave === this.totalWaves) {
           this.spawnBossWave();
           return;
         }
 
-        // Generate Math Question
         const q = MathEngine.getQuestionByMode(this.mathMode, this.customExcelQuestions);
         this.currentQuestion = q;
 
-        // Update Radar Question
         document.getElementById('mathQuestion').textContent = q.question;
         document.getElementById('waveDisplay').textContent = `${this.wave} / ${this.totalWaves}`;
 
-        // Spawn 3 or 4 Enemies with options
         const numOptions = q.options.length;
         const spacing = this.width / (numOptions + 1);
 
         q.options.forEach((optVal, index) => {
           const isTarget = (optVal === q.answer);
+
+          // Determine enemy visual kind: chicken or dinosaur
+          let kind = 'chicken';
+          if (this.enemyTheme === 'dino') {
+            kind = 'dino';
+          } else if (this.enemyTheme === 'mixed') {
+            kind = (index % 2 === 0) ? 'chicken' : 'dino';
+          }
+
           this.enemies.push({
             id: Math.random(),
+            kind: kind,
             x: spacing * (index + 1),
-            y: -60 - (index * 20), // slight stagger
+            y: -60 - (index * 24),
             targetY: 180 + Math.random() * 40,
-            width: 72,
-            height: 60,
+            width: 76,
+            height: 64,
             value: optVal,
             isTarget: isTarget,
             slotNumber: index + 1,
-            skinType: index,
             speedY: 2.2,
-            state: 'entering' // 'entering', 'patrolling', 'dying'
+            state: 'entering'
           });
         });
+
+        // Ambient sound
+        if (this.enemies[0].kind === 'chicken') {
+          sound.playChickenCluck();
+        } else {
+          sound.playDinoRoar();
+        }
       }
 
       spawnBossWave() {
         sound.playBossWarning();
         const banner = document.getElementById('bossWarning');
+        banner.textContent = (this.enemyTheme === 'chicken')
+          ? '⚠️ CẢNH BÁO: MẸ GÀ KHỔNG LỒ XUẤT HIỆN! ⚠️'
+          : '⚠️ CẢNH BÁO: ĐẠI ĐẾ KHỦNG LONG BẠO CHÚA XUẤT HIỆN! ⚠️';
         banner.classList.add('show');
         setTimeout(() => banner.classList.remove('show'), 2200);
 
-        // Tougher question for boss
         const q = MathEngine.getQuestionByMode(this.mathMode, this.customExcelQuestions);
         this.currentQuestion = q;
         document.getElementById('mathQuestion').textContent = `TRÙM: ${q.question}`;
         document.getElementById('waveDisplay').textContent = `BOSS!`;
 
+        const bossType = (this.enemyTheme === 'chicken') ? 'chicken' : 'dino';
         this.boss = {
           x: this.width / 2,
-          y: -120,
+          y: -130,
           targetY: 140,
-          width: 180,
-          height: 120,
+          width: 200,
+          height: 130,
           hp: 3,
           maxHp: 3,
-          speedX: 2.5,
-          dir: 1
+          speedX: 2.6,
+          dir: 1,
+          bossType: bossType
         };
 
-        // Spawn 3 drones under boss carrying answers
         const spacing = this.width / 4;
         q.options.slice(0, 3).forEach((optVal, i) => {
           this.enemies.push({
             id: Math.random(),
+            kind: (i % 2 === 0 ? 'chicken' : 'dino'),
             x: spacing * (i + 1),
             y: -40,
-            targetY: 270,
+            targetY: 280,
             width: 76,
             height: 64,
             value: optVal,
             isTarget: (optVal === q.answer),
             slotNumber: i + 1,
-            skinType: i + 2,
             speedY: 2.5,
             state: 'entering'
           });
@@ -1663,19 +1782,19 @@
       shoot() {
         if (this.state !== 'PLAYING') return;
         const now = Date.now();
-        const fireRate = this.player.fever ? 120 : 220;
+        const fireRate = this.player.fever ? 120 : 200;
         if (now - this.lastShotTime < fireRate) return;
         this.lastShotTime = now;
 
         sound.playShoot();
 
         if (this.player.fever) {
-          // Dual Rainbow Missiles
-          this.bullets.push({ x: this.player.x - 14, y: this.player.y - 20, vy: -14, isFever: true });
-          this.bullets.push({ x: this.player.x + 14, y: this.player.y - 20, vy: -14, isFever: true });
+          // Dual Red Laser Missiles (Chicken Invaders fever)
+          this.bullets.push({ x: this.player.x - 16, y: this.player.y - 20, vy: -14, isFever: true });
+          this.bullets.push({ x: this.player.x + 16, y: this.player.y - 20, vy: -14, isFever: true });
         } else {
-          // Standard Plasma Laser
-          this.bullets.push({ x: this.player.x, y: this.player.y - 24, vy: -11, isFever: false });
+          // Iconic Chicken Invaders Red/Orange Plasma
+          this.bullets.push({ x: this.player.x, y: this.player.y - 24, vy: -12, isFever: false });
         }
       }
 
@@ -1684,7 +1803,6 @@
         const targetEnemy = this.enemies.find(e => e.slotNumber === slot);
         if (targetEnemy) {
           sound.playShoot();
-          // Homing missile directly towards targetEnemy
           this.bullets.push({
             x: this.player.x,
             y: this.player.y - 20,
@@ -1718,28 +1836,40 @@
         });
       }
 
-      createExplosion(x, y, color = '#FDE047', count = 25) {
+      createExplosion(x, y, isChicken = true, count = 30) {
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
           const speed = Math.random() * 5 + 2;
+          // Chicken feathers or Dino scales
+          const colors = isChicken
+            ? ['#F8FAFC', '#F8FAFC', '#EF4444', '#FBBF24', '#FFFFFF']
+            : ['#10B981', '#34D399', '#F59E0B', '#FDE047', '#FFFFFF'];
+
           this.particles.push({
             x,
             y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
             size: Math.random() * 5 + 2,
-            color: ['#FBBF24', '#F43F5E', '#38BDF8', '#4ADE80', '#FFFFFF'][Math.floor(Math.random() * 5)],
+            color: colors[Math.floor(Math.random() * colors.length)],
             alpha: 1,
             decay: Math.random() * 0.02 + 0.015
           });
         }
+
+        // Spawn falling drumstick or egg!
+        this.fallingFoods.push({
+          x: x + (Math.random() - 0.5) * 20,
+          y: y,
+          vy: Math.random() * 2 + 1.8,
+          type: Math.random() > 0.5 ? 'drumstick' : 'egg'
+        });
       }
 
       handleCorrectHit(enemy) {
         sound.playCorrect();
-        this.createExplosion(enemy.x, enemy.y, '#FDE047', 40);
+        this.createExplosion(enemy.x, enemy.y, enemy.kind === 'chicken', 45);
 
-        // Record history
         this.historyAnswers.push({
           formula: this.currentQuestion.question,
           userAns: enemy.value,
@@ -1748,7 +1878,6 @@
           hint: this.currentQuestion.hint
         });
 
-        // Score & Combos
         this.player.combo++;
         if (this.player.combo > this.player.maxCombo) {
           this.player.maxCombo = this.player.combo;
@@ -1760,10 +1889,9 @@
 
         this.showFloatingText(`+${gainedScore}! ⭐`, enemy.x, enemy.y - 20, '#FDE047');
 
-        // Check Fever activation (3 in a row)
         if (this.player.combo >= 3 && !this.player.fever) {
           this.player.fever = true;
-          this.player.feverTimer = 400; // ~6 seconds
+          this.player.feverTimer = 400;
           sound.playCombo();
           this.showToast('🔥 FEVER MODE! x2 ĐIỂM!', true);
         } else {
@@ -1772,17 +1900,15 @@
 
         this.updateHUD();
 
-        // If in Boss Wave, damage boss
         if (this.boss) {
           this.boss.hp--;
-          this.createExplosion(this.boss.x, this.boss.y, '#EF4444', 50);
+          this.createExplosion(this.boss.x, this.boss.y, false, 60);
           if (this.boss.hp <= 0) {
             this.victory();
             return;
           }
         }
 
-        // Next Wave
         this.wave++;
         if (this.wave > this.totalWaves) {
           this.victory();
@@ -1793,9 +1919,11 @@
 
       handleWrongHit(enemy) {
         sound.playWrong();
+        if (enemy.kind === 'chicken') sound.playChickenCluck();
+        else sound.playDinoRoar();
+
         this.triggerScreenShake(8, 14);
 
-        // Record history
         this.historyAnswers.push({
           formula: this.currentQuestion.question,
           userAns: enemy.value,
@@ -1804,7 +1932,6 @@
           hint: this.currentQuestion.hint
         });
 
-        // Break combo
         this.player.combo = 0;
         this.player.fever = false;
         this.player.hearts--;
@@ -1821,6 +1948,7 @@
 
       updateHUD() {
         document.getElementById('scoreDisplay').textContent = this.player.score;
+        document.getElementById('collectedDrumsticks').textContent = `🍗 x${this.player.drumsticks} Đùi gà & Trứng`;
 
         let heartsStr = '';
         for (let i = 0; i < this.player.maxHearts; i++) {
@@ -1855,19 +1983,16 @@
         const modal = document.getElementById('modalVictory');
         modal.classList.add('show');
 
-        // Stats
         document.getElementById('statScore').textContent = this.player.score;
         const totalCorrect = this.historyAnswers.filter(a => a.isCorrect).length;
         document.getElementById('statCorrect').textContent = `${totalCorrect} / ${this.historyAnswers.length}`;
-        document.getElementById('statMaxCombo').textContent = this.player.maxCombo;
+        document.getElementById('statDrumsticks').textContent = this.player.drumsticks;
 
-        // Stars
         let stars = '⭐⭐⭐';
         if (this.player.hearts === 2) stars = '⭐⭐';
         else if (this.player.hearts === 1) stars = '⭐';
         document.getElementById('starsDisplay').textContent = stars;
 
-        // Populate Mistakes Review Book
         const list = document.getElementById('reviewList');
         list.innerHTML = '';
         this.historyAnswers.forEach(h => {
@@ -1889,14 +2014,11 @@
 
       gameOver() {
         this.state = 'GAMEOVER';
-        this.victory(); // Show review book so child can learn from mistakes
+        this.victory();
         document.getElementById('victoryTitle').innerHTML = '💪 CỐ GẮNG <span class="highlight">LẦN SAU!</span>';
         document.getElementById('victorySubtitle').textContent = 'Bé đã rất nỗ lực! Hãy xem lại các câu cần nhớ và thử lại nhé!';
       }
 
-      /* ==========================================================================
-         EXCEL IMPORT & EXPORT
-         ========================================================================== */
       processExcelFile(file) {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -1906,7 +2028,6 @@
             const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
             const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
 
-            // Parse questions from rows (Skip header row 0)
             const questions = [];
             for (let i = 1; i < jsonData.length; i++) {
               const row = jsonData[i];
@@ -1938,7 +2059,6 @@
               document.getElementById('excelFileInfo').style.display = 'block';
               sound.playCorrect();
 
-              // Switch to start game directly
               setTimeout(() => {
                 document.getElementById('modalExcel').classList.remove('show');
                 this.startNewGame();
@@ -1980,19 +2100,15 @@
         }
       }
 
-      /* ==========================================================================
-         GAME LOOP: UPDATE & RENDER (60 FPS)
-         ========================================================================== */
       loop(timestamp) {
         if (this.state === 'PLAYING') {
           this.update();
         }
-        this.render();
+        this.render(timestamp);
         requestAnimationFrame((ts) => this.loop(ts));
       }
 
       update() {
-        // Player smooth movement towards pointer / keys
         if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
           this.player.targetX -= this.player.speed * 1.4;
         }
@@ -2000,16 +2116,13 @@
           this.player.targetX += this.player.speed * 1.4;
         }
 
-        // Clamp inside screen bounds
         this.player.targetX = Math.max(40, Math.min(this.width - 40, this.player.targetX));
-        this.player.x += (this.player.targetX - this.player.x) * 0.2;
+        this.player.x += (this.player.targetX - this.player.x) * 0.22;
 
-        // Auto shoot if pointer held down
         if (this.isPointerDown) {
           this.shoot();
         }
 
-        // Fever mode countdown
         if (this.player.fever) {
           this.player.feverTimer--;
           if (this.player.feverTimer <= 0) {
@@ -2018,12 +2131,19 @@
           }
         }
 
-        // Screen Shake
         if (this.shakeTimer > 0) {
           this.shakeTimer--;
         }
 
-        // Update Starfield
+        // Scroll Nebula & Stars
+        this.nebulaClouds.forEach(c => {
+          c.y += c.speedY * (this.player.fever ? 2 : 1);
+          if (c.y - c.radius > this.height) {
+            c.y = -c.radius;
+            c.x = Math.random() * this.width;
+          }
+        });
+
         this.stars.forEach(s => {
           s.y += s.speed * (this.player.fever ? 2.5 : 1);
           if (s.y > this.height) {
@@ -2032,7 +2152,7 @@
           }
         });
 
-        // Update Boss if active
+        // Boss Movement
         if (this.boss) {
           if (this.boss.y < this.boss.targetY) {
             this.boss.y += 2;
@@ -2044,7 +2164,7 @@
           }
         }
 
-        // Update Enemies
+        // Enemies Movement
         this.enemies.forEach(e => {
           if (e.state === 'entering') {
             e.y += e.speedY;
@@ -2052,33 +2172,27 @@
               e.state = 'patrolling';
             }
           } else if (e.state === 'patrolling') {
-            // Gentle floating downwards
             e.y += 0.25;
-            // If enemy reached danger zone near player, gently reset position
             if (e.y > this.height - 180) {
               e.y = 120;
             }
           }
         });
 
-        // Update Bullets
+        // Bullets
         for (let i = this.bullets.length - 1; i >= 0; i--) {
           const b = this.bullets[i];
-
-          // Homing logic if assigned
           if (b.homingTarget) {
             const dx = b.homingTarget.x - b.x;
-            b.x += dx * 0.15;
+            b.x += dx * 0.16;
           }
-
           b.y += b.vy;
 
-          // Check Bullet - Enemy Collisions
           let hit = false;
           for (let j = this.enemies.length - 1; j >= 0; j--) {
             const e = this.enemies[j];
             const dist = Math.hypot(b.x - e.x, b.y - e.y);
-            if (dist < 46) {
+            if (dist < 48) {
               hit = true;
               if (e.isTarget) {
                 this.handleCorrectHit(e);
@@ -2089,13 +2203,34 @@
             }
           }
 
-          // Remove bullet if hit or out of screen
           if (hit || b.y < -30) {
             this.bullets.splice(i, 1);
           }
         }
 
-        // Update Particles
+        // Falling Drumsticks / Golden Eggs
+        for (let i = this.fallingFoods.length - 1; i >= 0; i--) {
+          const f = this.fallingFoods[i];
+          f.y += f.vy;
+
+          // Check pickup by player ship
+          const dist = Math.hypot(f.x - this.player.x, f.y - this.player.y);
+          if (dist < 42) {
+            sound.playCollectFood();
+            this.player.drumsticks++;
+            this.player.score += 25;
+            this.showFloatingText('+25 🍗', f.x, f.y, '#FBBF24');
+            this.updateHUD();
+            this.fallingFoods.splice(i, 1);
+            continue;
+          }
+
+          if (f.y > this.height + 30) {
+            this.fallingFoods.splice(i, 1);
+          }
+        }
+
+        // Particles
         for (let i = this.particles.length - 1; i >= 0; i--) {
           const p = this.particles[i];
           p.x += p.vx;
@@ -2106,7 +2241,7 @@
           }
         }
 
-        // Update Floating Texts
+        // Floating Texts
         for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
           const ft = this.floatingTexts[i];
           ft.y += ft.vy;
@@ -2117,20 +2252,30 @@
         }
       }
 
-      render() {
+      render(timestamp) {
         this.ctx.save();
 
-        // Apply Screen Shake
         if (this.shakeTimer > 0) {
           const offsetX = (Math.random() - 0.5) * this.shakeIntensity;
           const offsetY = (Math.random() - 0.5) * this.shakeIntensity;
           this.ctx.translate(offsetX, offsetY);
         }
 
-        // Clear Background
+        // Clear background with deep purple tone
         this.ctx.clearRect(0, 0, this.width, this.height);
 
-        // Render Starfield
+        // Render Glowing Nebula Clouds (Like Chicken Invaders screenshot)
+        this.nebulaClouds.forEach(c => {
+          const grad = this.ctx.createRadialGradient(c.x, c.y, 10, c.x, c.y, c.radius);
+          grad.addColorStop(0, c.color);
+          grad.addColorStop(1, 'transparent');
+          this.ctx.fillStyle = grad;
+          this.ctx.beginPath();
+          this.ctx.arc(c.x, c.y, c.radius, 0, Math.PI * 2);
+          this.ctx.fill();
+        });
+
+        // Render Stars
         this.stars.forEach(s => {
           this.ctx.fillStyle = s.color;
           this.ctx.beginPath();
@@ -2138,46 +2283,57 @@
           this.ctx.fill();
         });
 
-        // Render Boss
+        // Boss
         if (this.boss) {
-          DrawHelper.drawBoss(this.ctx, this.boss);
+          DrawHelper.drawBoss(this.ctx, this.boss, timestamp);
         }
 
-        // Render Enemies
+        // Render Enemies (Chicken or Dinosaur)
         this.enemies.forEach(e => {
-          DrawHelper.drawAlienEnemy(this.ctx, e);
+          if (e.kind === 'chicken') {
+            DrawHelper.drawChicken(this.ctx, e, timestamp);
+          } else {
+            DrawHelper.drawDinosaur(this.ctx, e, timestamp);
+          }
         });
 
-        // Render Bullets
+        // Render Falling Food (Drumsticks, Golden Eggs)
+        this.fallingFoods.forEach(f => {
+          DrawHelper.drawFallingFood(this.ctx, f);
+        });
+
+        // Bullets: Iconic Chicken Invaders Red/Orange Plasma
         this.bullets.forEach(b => {
           this.ctx.save();
           if (b.isFever) {
-            // Rainbow missile
-            DrawHelper.drawStar(this.ctx, b.x, b.y, 5, 12, 6, '#FBBF24');
-          } else {
-            // Neon cyan laser
             this.ctx.beginPath();
-            this.ctx.ellipse(b.x, b.y, 4, 12, 0, 0, Math.PI * 2);
-            this.ctx.fillStyle = '#38BDF8';
-            this.ctx.shadowColor = '#38BDF8';
-            this.ctx.shadowBlur = 10;
+            this.ctx.ellipse(b.x, b.y, 6, 16, 0, 0, Math.PI * 2);
+            this.ctx.fillStyle = '#FBBF24';
+            this.ctx.shadowColor = '#F59E0B';
+            this.ctx.shadowBlur = 14;
+            this.ctx.fill();
+          } else {
+            this.ctx.beginPath();
+            this.ctx.ellipse(b.x, b.y, 4.5, 14, 0, 0, Math.PI * 2);
+            this.ctx.fillStyle = '#EF4444';
+            this.ctx.shadowColor = '#F43F5E';
+            this.ctx.shadowBlur = 12;
             this.ctx.fill();
           }
           this.ctx.restore();
         });
 
-        // Render Player Fighter
-        DrawHelper.drawPlayerShip(
+        // Render Player Ship: Exact Chicken Invaders Classic Fighter
+        DrawHelper.drawChickenInvadersShip(
           this.ctx,
           this.player.x,
           this.player.y,
           this.player.width,
           this.player.height,
-          this.shipType,
           this.player.fever
         );
 
-        // Render Particles
+        // Particles
         this.particles.forEach(p => {
           this.ctx.save();
           this.ctx.globalAlpha = Math.max(0, p.alpha);
@@ -2188,7 +2344,7 @@
           this.ctx.restore();
         });
 
-        // Render Floating Texts
+        // Floating Texts
         this.floatingTexts.forEach(ft => {
           this.ctx.save();
           this.ctx.globalAlpha = Math.max(0, ft.alpha);
@@ -2203,7 +2359,6 @@
       }
     }
 
-    // Launch game on window load
     window.addEventListener('DOMContentLoaded', () => {
       window.gameInstance = new Game();
     });
