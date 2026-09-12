@@ -1,0 +1,2212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Chiến Cơ Toán Học - Vệ Binh Ngân Hà (Math Sky Striker)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+  <!-- SheetJS Library for Excel Import/Export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-bright: #6366F1;
+      --accent-yellow: #FBBF24;
+      --accent-orange: #F97316;
+      --accent-pink: #EC4899;
+      --accent-green: #10B981;
+      --accent-cyan: #06B6D4;
+      --bg-dark: #0F172A;
+      --panel-bg: rgba(30, 41, 59, 0.85);
+      --panel-border: rgba(255, 255, 255, 0.15);
+      --font-main: 'Nunito', sans-serif;
+      --font-display: 'Fredoka One', 'Nunito', cursive;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-dark);
+      font-family: var(--font-main);
+      color: #FFFFFF;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at center, #1E1B4B 0%, #0F172A 100%);
+    }
+
+    canvas#gameCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 1;
+    }
+
+    /* UI Overlay Layers */
+    .ui-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+    }
+
+    .interactive {
+      pointer-events: auto;
+    }
+
+    /* Top HUD */
+    .hud-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .hud-card {
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 2px solid var(--panel-border);
+      border-radius: 20px;
+      padding: 10px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hearts-container {
+      display: flex;
+      gap: 6px;
+      font-size: 26px;
+      filter: drop-shadow(0 2px 6px rgba(236,72,153,0.5));
+    }
+
+    .score-badge {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .score-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: #94A3B8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .score-value {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--accent-yellow);
+      text-shadow: 0 2px 10px rgba(251,191,36,0.5);
+      line-height: 1;
+    }
+
+    /* Central Math Radar */
+    .math-radar {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.9) 0%, rgba(147, 51, 234, 0.9) 100%);
+      border: 3px solid #A7F3D0;
+      border-radius: 24px;
+      padding: 8px 32px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(79, 70, 229, 0.6), inset 0 2px 10px rgba(255,255,255,0.4);
+      animation: pulseRadar 2.5s infinite ease-in-out;
+      min-width: 320px;
+    }
+    @keyframes pulseRadar {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 30px rgba(79, 70, 229, 0.6); }
+      50% { transform: scale(1.02); box-shadow: 0 12px 36px rgba(167, 243, 208, 0.7); }
+    }
+
+    .radar-tag {
+      font-size: 12px;
+      font-weight: 800;
+      color: #E0E7FF;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .radar-question {
+      font-family: var(--font-display);
+      font-size: 38px;
+      color: #FFFFFF;
+      letter-spacing: 2px;
+      text-shadow: 0 3px 6px rgba(0,0,0,0.4);
+      line-height: 1.2;
+    }
+
+    .hud-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--panel-border);
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      cursor: pointer;
+      color: #FFFFFF;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .icon-btn:hover {
+      transform: scale(1.1);
+      border-color: var(--accent-yellow);
+      background: rgba(251, 191, 36, 0.2);
+    }
+
+    /* Combo & Fever Banner */
+    .combo-banner {
+      position: absolute;
+      top: 110px;
+      right: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      opacity: 0;
+      transform: translateX(40px);
+    }
+    .combo-banner.active {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .combo-text {
+      font-family: var(--font-display);
+      font-size: 32px;
+      color: var(--accent-orange);
+      text-shadow: 0 2px 12px rgba(249,115,22,0.8);
+    }
+    .fever-badge {
+      background: linear-gradient(90deg, #F59E0B, #EF4444);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 15px #EF4444;
+      animation: bounce 0.6s infinite alternate;
+    }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-5px); }
+    }
+
+    /* Target Quick Keys (Bottom-center bar for 1, 2, 3, 4 keys) */
+    .quick-keys-bar {
+      margin: 0 auto 12px auto;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 30px;
+      padding: 6px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: #94A3B8;
+    }
+    .key-badge {
+      background: #334155;
+      color: #F8FAFC;
+      border: 1px solid #64748B;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 12px;
+    }
+
+    /* Modals & Dialogs (Start Screen, Victory, Settings, Import Excel) */
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 15, 30, 0.85);
+      backdrop-filter: blur(16px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: linear-gradient(160deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border: 2px solid rgba(148, 163, 184, 0.3);
+      border-radius: 28px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(79, 70, 229, 0.2);
+      padding: 36px 32px;
+      text-align: center;
+      position: relative;
+      animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes modalSlide {
+      from { transform: translateY(30px) scale(0.95); }
+      to { transform: translateY(0) scale(1); }
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 36px;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 10px rgba(255,255,255,0.2);
+    }
+    .modal-title span.highlight {
+      color: var(--accent-yellow);
+      text-shadow: 0 2px 15px rgba(251, 191, 36, 0.6);
+    }
+    .modal-subtitle {
+      font-size: 15px;
+      color: #94A3B8;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    /* Mode Selector Tabs/Grid */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 500px) {
+      .mode-grid { grid-template-columns: 1fr; }
+    }
+
+    .mode-btn {
+      background: rgba(51, 65, 85, 0.6);
+      border: 2px solid rgba(148, 163, 184, 0.2);
+      border-radius: 18px;
+      padding: 14px 16px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .mode-btn:hover {
+      background: rgba(79, 70, 229, 0.25);
+      border-color: var(--primary-bright);
+      transform: translateY(-2px);
+    }
+    .mode-btn.active {
+      background: linear-gradient(135deg, rgba(79, 70, 229, 0.4) 0%, rgba(99, 102, 241, 0.3) 100%);
+      border-color: var(--accent-yellow);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    }
+    .mode-btn .mode-icon {
+      font-size: 26px;
+    }
+    .mode-btn .mode-name {
+      font-weight: 800;
+      font-size: 16px;
+      color: #FFFFFF;
+    }
+    .mode-btn .mode-desc {
+      font-size: 12px;
+      color: #94A3B8;
+      line-height: 1.3;
+    }
+
+    /* Action Buttons */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-main {
+      background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+      border: none;
+      border-radius: 50px;
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 22px;
+      padding: 14px 44px;
+      cursor: pointer;
+      box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5), inset 0 2px 4px rgba(255,255,255,0.4);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn-main:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 30px rgba(245, 158, 11, 0.7);
+    }
+    .btn-main:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: rgba(51, 65, 85, 0.8);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 50px;
+      color: #E2E8F0;
+      font-family: var(--font-main);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-secondary:hover {
+      background: #475569;
+      color: #FFFFFF;
+      border-color: #94A3B8;
+    }
+
+    /* Excel Import Box */
+    .excel-dropzone {
+      border: 2px dashed rgba(148, 163, 184, 0.4);
+      border-radius: 20px;
+      padding: 24px 16px;
+      background: rgba(15, 23, 42, 0.5);
+      cursor: pointer;
+      margin: 16px 0;
+      transition: all 0.2s ease;
+    }
+    .excel-dropzone:hover, .excel-dropzone.dragover {
+      border-color: var(--accent-green);
+      background: rgba(16, 185, 129, 0.1);
+    }
+    .excel-icon {
+      font-size: 40px;
+      color: var(--accent-green);
+      margin-bottom: 8px;
+    }
+
+    /* Ship Selector (Hangar) */
+    .ship-selector {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 16px 0 24px 0;
+    }
+    .ship-option {
+      border: 2px solid rgba(148, 163, 184, 0.2);
+      border-radius: 16px;
+      padding: 10px 14px;
+      background: rgba(30, 41, 59, 0.6);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .ship-option:hover {
+      border-color: var(--accent-yellow);
+      transform: translateY(-2px);
+    }
+    .ship-option.selected {
+      border-color: var(--accent-yellow);
+      background: rgba(251, 191, 36, 0.15);
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);
+    }
+    .ship-canvas-preview {
+      width: 48px;
+      height: 48px;
+    }
+    .ship-name {
+      font-size: 12px;
+      font-weight: 700;
+      color: #E2E8F0;
+    }
+
+    /* Victory & Review Screen */
+    .stars-rating {
+      font-size: 44px;
+      margin: 10px 0;
+      filter: drop-shadow(0 4px 10px rgba(251,191,36,0.6));
+    }
+    .stat-pills {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin: 16px 0 24px 0;
+    }
+    .stat-pill {
+      background: rgba(51, 65, 85, 0.5);
+      border-radius: 14px;
+      padding: 10px 18px;
+      text-align: center;
+    }
+    .stat-pill .num {
+      font-family: var(--font-display);
+      font-size: 26px;
+      color: var(--accent-yellow);
+    }
+    .stat-pill .lbl {
+      font-size: 11px;
+      color: #94A3B8;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .review-list {
+      text-align: left;
+      max-height: 180px;
+      overflow-y: auto;
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 14px;
+      padding: 12px;
+      margin: 16px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .review-item {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+    }
+    .review-item:last-child { border-bottom: none; }
+    .review-item .formula { font-weight: 800; }
+    .review-item .ans-correct { color: var(--accent-green); font-weight: 800; }
+    .review-item .ans-wrong { color: #EF4444; font-weight: 700; text-decoration: line-through; margin-right: 8px; }
+    .review-hint { font-size: 11px; color: #38BDF8; margin-top: 2px; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+    ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #64748B; }
+
+    /* Feedback Alert Toast (Awesome / Try again) */
+    .toast-feedback {
+      position: absolute;
+      top: 35%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.5);
+      font-family: var(--font-display);
+      font-size: 42px;
+      padding: 12px 36px;
+      border-radius: 50px;
+      color: #FFFFFF;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 50;
+      text-align: center;
+      white-space: nowrap;
+    }
+    .toast-feedback.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .toast-success {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      box-shadow: 0 10px 40px rgba(16, 185, 129, 0.8);
+      border: 3px solid #6EE7B7;
+    }
+    .toast-fail {
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      box-shadow: 0 10px 40px rgba(239, 68, 68, 0.8);
+      border: 3px solid #FCA5A5;
+    }
+
+    /* Boss Warning */
+    .boss-warning {
+      position: absolute;
+      top: 45%;
+      left: 0;
+      width: 100%;
+      background: rgba(220, 38, 38, 0.85);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-size: 32px;
+      text-align: center;
+      padding: 16px 0;
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+      z-index: 45;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      box-shadow: 0 0 50px #EF4444;
+      border-top: 3px solid #FEF08A;
+      border-bottom: 3px solid #FEF08A;
+    }
+    .boss-warning.show {
+      transform: scaleY(1);
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <!-- Main Canvas -->
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- UI Overlay -->
+    <div class="ui-layer">
+      <!-- Top HUD -->
+      <div class="hud-top">
+        <!-- Health & Score -->
+        <div class="hud-card">
+          <div class="hearts-container" id="heartsDisplay">❤️❤️❤️</div>
+          <div class="score-badge">
+            <span class="score-label">Điểm Số</span>
+            <span class="score-value" id="scoreDisplay">0</span>
+          </div>
+        </div>
+
+        <!-- Math Radar Center -->
+        <div class="math-radar" id="mathRadar">
+          <div class="radar-tag">
+            <span>🎯</span> <span id="radarModeText">Nhiệm Vụ Tính Toán</span>
+          </div>
+          <div class="radar-question" id="mathQuestion">358 + 267 = ?</div>
+        </div>
+
+        <!-- Controls & Wave count -->
+        <div class="hud-card">
+          <div class="score-badge" style="text-align: right; margin-right: 8px;">
+            <span class="score-label">Câu hỏi</span>
+            <span class="score-value" id="waveDisplay" style="color: #38BDF8;">1 / 10</span>
+          </div>
+          <div class="hud-controls interactive">
+            <button class="icon-btn" id="btnAudioToggle" title="Bật/Tắt Âm thanh">🔊</button>
+            <button class="icon-btn" id="btnPause" title="Tạm dừng">⏸️</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Combo & Fever indicator -->
+      <div class="combo-banner" id="comboBanner">
+        <div class="combo-text" id="comboText">COMBO x2!</div>
+        <div class="fever-badge" id="feverBadge">🔥 FEVER MODE x2 ĐIỂM!</div>
+      </div>
+
+      <!-- Quick keys helper bar -->
+      <div class="quick-keys-bar interactive">
+        <span>🎮 <b>Cách lái:</b> Chuột hoặc phím <span class="key-badge">←</span> <span class="key-badge">→</span> | Bắn: <span class="key-badge">Cách (Space)</span> | Hoặc bấm <span class="key-badge">1</span> <span class="key-badge">2</span> <span class="key-badge">3</span> <span class="key-badge">4</span> để phóng tên lửa tự tìm</span>
+      </div>
+    </div>
+
+    <!-- Toast Feedback -->
+    <div class="toast-feedback" id="toastFeedback">CHÍNH XÁC! ⭐ +100</div>
+
+    <!-- Boss Warning Banner -->
+    <div class="boss-warning" id="bossWarning">⚠️ CẢNH BÁO: TRÙM MA TRẬN XUẤT HIỆN! ⚠️</div>
+
+    <!-- MODAL 1: START SCREEN & MODE SELECT -->
+    <div class="modal-overlay show" id="modalStart">
+      <div class="modal-card">
+        <h1 class="modal-title">🚀 CHIẾN CƠ <span class="highlight">TOÁN HỌC</span></h1>
+        <p class="modal-subtitle">Vệ Binh Ngân Hà — Lái phi thuyền giải mã các phép tính kỳ bí!</p>
+
+        <!-- Math Mode Selection -->
+        <div class="mode-grid">
+          <div class="mode-btn active" data-mode="add_carry">
+            <span class="mode-icon">➕</span>
+            <span class="mode-name">Cộng có nhớ 3 chữ số</span>
+            <span class="mode-desc">Phạm vi 1000, rèn nhớ sang hàng chục và hàng trăm</span>
+          </div>
+          <div class="mode-btn" data-mode="sub_borrow">
+            <span class="mode-icon">➖</span>
+            <span class="mode-name">Trừ có nhớ 3 chữ số</span>
+            <span class="mode-desc">Phạm vi 1000, rèn kỹ năng mượn số chính xác</span>
+          </div>
+          <div class="mode-btn" data-mode="multi_div">
+            <span class="mode-icon">✖️</span>
+            <span class="mode-name">Bảng Cửu Chương</span>
+            <span class="mode-desc">Bảng nhân & chia từ 2 đến 9 thần tốc</span>
+          </div>
+          <div class="mode-btn" data-mode="mixed_challenge">
+            <span class="mode-icon">🌟</span>
+            <span class="mode-name">Hỗn Hợp Siêu Cấp</span>
+            <span class="mode-desc">Thử thách toàn diện cả Cộng, Trừ, Nhân, Chia</span>
+          </div>
+        </div>
+
+        <!-- Ship Selection -->
+        <div style="font-size: 13px; font-weight: 700; color: #94A3B8; text-transform: uppercase; margin-bottom: 6px;">Chọn Phi Thuyền Của Bé</div>
+        <div class="ship-selector">
+          <div class="ship-option selected" data-ship="blue">
+            <canvas class="ship-canvas-preview" id="previewShipBlue" width="48" height="48"></canvas>
+            <span class="ship-name">Cá Voi Xanh</span>
+          </div>
+          <div class="ship-option" data-ship="red">
+            <canvas class="ship-canvas-preview" id="previewShipRed" width="48" height="48"></canvas>
+            <span class="ship-name">Phượng Hoàng Lửa</span>
+          </div>
+          <div class="ship-option" data-ship="gold">
+            <canvas class="ship-canvas-preview" id="previewShipGold" width="48" height="48"></canvas>
+            <span class="ship-name">Tia Chớp Vàng</span>
+          </div>
+        </div>
+
+        <!-- Excel Custom Button -->
+        <div class="btn-row">
+          <button class="btn-secondary" id="btnOpenExcelModal">
+            <span>📥</span> Nhập Đề Từ File Excel (.xlsx)
+          </button>
+        </div>
+
+        <div class="btn-row" style="margin-top: 16px;">
+          <button class="btn-main" id="btnStartGame">
+            <span>🚀</span> XUẤT KÍCH NGAY!
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: EXCEL IMPORT MODAL -->
+    <div class="modal-overlay" id="modalExcel">
+      <div class="modal-card">
+        <h2 class="modal-title">📊 NẠP ĐỀ BÀI <span class="highlight">EXCEL</span></h2>
+        <p class="modal-subtitle">Thầy cô và Phụ huynh có thể tự soạn đề toán theo ý muốn!</p>
+
+        <div class="excel-dropzone" id="excelDropzone">
+          <div class="excel-icon">📁</div>
+          <div style="font-weight: 800; font-size: 16px; margin-bottom: 4px;">Kéo thả file Excel (.xlsx / .csv) vào đây</div>
+          <div style="font-size: 13px; color: #94A3B8;">hoặc click để chọn file từ máy tính</div>
+          <input type="file" id="excelFileInput" accept=".xlsx, .xls, .csv" style="display: none;">
+        </div>
+
+        <div id="excelFileInfo" style="display: none; padding: 10px; background: rgba(16, 185, 129, 0.2); border-radius: 12px; margin-bottom: 14px; font-size: 14px; color: #6EE7B7;">
+          ✅ Đã tải thành công: <b id="excelFileName">de_toan.xlsx</b> (<span id="excelQuestionCount">0</span> câu hỏi)
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-secondary" id="btnDownloadTemplate">
+            <span>📄</span> Tải File Mẫu (.xlsx)
+          </button>
+          <button class="btn-secondary" id="btnBackFromExcel">
+            <span>Quay lại</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: VICTORY & SUMMARY REPORT -->
+    <div class="modal-overlay" id="modalVictory">
+      <div class="modal-card">
+        <h2 class="modal-title" id="victoryTitle">🎉 CHIẾN CÔNG <span class="highlight">XUẤT SẮC!</span></h2>
+        <div class="stars-rating" id="starsDisplay">⭐⭐⭐</div>
+        <p class="modal-subtitle" id="victorySubtitle">Bé đã xuất sắc hoàn thành xuất sắc đợt huấn luyện bay!</p>
+
+        <div class="stat-pills">
+          <div class="stat-pill">
+            <div class="num" id="statScore">1250</div>
+            <div class="lbl">Tổng Điểm</div>
+          </div>
+          <div class="stat-pill">
+            <div class="num" id="statCorrect">10/10</div>
+            <div class="lbl">Độ Chính Xác</div>
+          </div>
+          <div class="stat-pill">
+            <div class="num" id="statMaxCombo">5</div>
+            <div class="lbl">Combo Tối Đa</div>
+          </div>
+        </div>
+
+        <!-- Mistakes review book -->
+        <div style="text-align: left; font-size: 13px; font-weight: 800; color: #94A3B8; text-transform: uppercase;">
+          📖 Sổ Tay Ôn Tập (Chi tiết các câu hỏi)
+        </div>
+        <div class="review-list" id="reviewList">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="btn-row">
+          <button class="btn-main" id="btnPlayAgain">
+            <span>🔄</span> CHƠI LẠI
+          </button>
+          <button class="btn-secondary" id="btnHomeFromVictory">
+            <span>🏠</span> Về Màn Hình Chính
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       1. WEB AUDIO SYNTHESIZER (100% Offline Sound Generator)
+       ========================================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.isMuted = false;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playTone(freq, type = 'sine', duration = 0.15, gainVal = 0.2) {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+
+          gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      playShoot() {
+        if (this.isMuted || !this.ctx) return;
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.12);
+
+          gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.12);
+        } catch(e){}
+      }
+
+      playCorrect() {
+        if (this.isMuted || !this.ctx) return;
+        // Joyful chord: C5 -> E5 -> G5 -> C6
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((f, i) => {
+          setTimeout(() => {
+            this.playTone(f, 'sine', 0.25, 0.25);
+          }, i * 65);
+        });
+      }
+
+      playWrong() {
+        if (this.isMuted || !this.ctx) return;
+        // Soft kid-friendly "boing"
+        try {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(110, this.ctx.currentTime + 0.25);
+
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + 0.25);
+        } catch(e){}
+      }
+
+      playCombo() {
+        if (this.isMuted || !this.ctx) return;
+        [587.33, 739.99, 880, 1174.66].forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 'triangle', 0.2, 0.22), i * 50);
+        });
+      }
+
+      playBossWarning() {
+        if (this.isMuted || !this.ctx) return;
+        for (let i = 0; i < 3; i++) {
+          setTimeout(() => {
+            this.playTone(440, 'square', 0.15, 0.15);
+          }, i * 200);
+        }
+      }
+
+      playVictory() {
+        if (this.isMuted || !this.ctx) return;
+        const melody = [523, 659, 784, 1046, 880, 1046];
+        melody.forEach((f, i) => {
+          setTimeout(() => this.playTone(f, 'triangle', 0.35, 0.25), i * 110);
+        });
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    /* ==========================================================================
+       2. MATH ENGINE & SMART DISTRACTOR GENERATOR
+       ========================================================================== */
+    class MathEngine {
+      static randomInt(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      // Generate 3-digit addition with carry (Có nhớ)
+      static genAdditionWithCarry() {
+        let a, b, sum;
+        let hasCarry = false;
+        let attempts = 0;
+        while (!hasCarry && attempts < 100) {
+          attempts++;
+          a = this.randomInt(150, 490);
+          b = this.randomInt(150, 490);
+          // Check if carry exists at unit or tens place
+          const unitCarry = (a % 10) + (b % 10) >= 10;
+          const tensCarry = (Math.floor(a / 10) % 10) + (Math.floor(b / 10) % 10) + (unitCarry ? 1 : 0) >= 10;
+          if (unitCarry || tensCarry) {
+            hasCarry = true;
+          }
+        }
+        sum = a + b;
+        const question = `${a} + ${b} = ?`;
+        const distractors = this.makeAdditionDistractors(a, b, sum);
+        return {
+          question,
+          answer: sum,
+          options: this.shuffleOptions([sum, ...distractors]),
+          hint: `Lưu ý nhớ 1 sang cột hàng bên cạnh khi tổng lớn hơn hoặc bằng 10!`
+        };
+      }
+
+      // Generate 3-digit subtraction with borrow (Có nhớ / mượn)
+      static genSubtractionWithBorrow() {
+        let a, b, diff;
+        let hasBorrow = false;
+        let attempts = 0;
+        while (!hasBorrow && attempts < 100) {
+          attempts++;
+          a = this.randomInt(300, 850);
+          b = this.randomInt(120, a - 50);
+          const unitBorrow = (a % 10) < (b % 10);
+          const tensBorrow = (Math.floor(a / 10) % 10) < (Math.floor(b / 10) % 10);
+          if (unitBorrow || tensBorrow) {
+            hasBorrow = true;
+          }
+        }
+        diff = a - b;
+        const question = `${a} - ${b} = ?`;
+        const distractors = this.makeSubtractionDistractors(a, b, diff);
+        return {
+          question,
+          answer: diff,
+          options: this.shuffleOptions([diff, ...distractors]),
+          hint: `Nhớ mượn 1 ở hàng trước đó và trả lại 1 nhé bé!`
+        };
+      }
+
+      // Multiplication & Division Times Tables (2 to 9)
+      static genMultiplicationOrDivision() {
+        const isDiv = Math.random() > 0.45;
+        const num1 = this.randomInt(2, 9);
+        const num2 = this.randomInt(2, 9);
+        const product = num1 * num2;
+
+        if (isDiv) {
+          const distractors = this.makeDivDistractors(product, num1, num2);
+          return {
+            question: `${product} : ${num1} = ?`,
+            answer: num2,
+            options: this.shuffleOptions([num2, ...distractors]),
+            hint: `Nhẩm xem số nào nhân với ${num1} bằng ${product} nhé!`
+          };
+        } else {
+          const distractors = this.makeMultDistractors(num1, num2, product);
+          return {
+            question: `${num1} × ${num2} = ?`,
+            answer: product,
+            options: this.shuffleOptions([product, ...distractors]),
+            hint: `Bảng nhân ${num1}: ${num1} nhân ${num2} bằng bao nhiêu?`
+          };
+        }
+      }
+
+      // Smart distractors based on typical child calculation errors
+      static makeAdditionDistractors(a, b, correct) {
+        const set = new Set();
+        // Mistake 1: Forgot carry (off by 10)
+        if (correct - 10 > 0) set.add(correct - 10);
+        // Mistake 2: Extra carry (off by +10)
+        set.add(correct + 10);
+        // Mistake 3: Off by 1 in units
+        set.add(correct + 1);
+        set.add(correct - 1);
+        // Mistake 4: Off by 100
+        if (correct - 100 > 0) set.add(correct - 100);
+
+        return Array.from(set).filter(n => n !== correct).slice(0, 3);
+      }
+
+      static makeSubtractionDistractors(a, b, correct) {
+        const set = new Set();
+        // Forget to subtract the borrowed 1
+        set.add(correct + 10);
+        // Subtract smaller from bigger directly without borrowing
+        if (correct - 10 > 0) set.add(correct - 10);
+        set.add(correct + 1);
+        set.add(correct - 1);
+        return Array.from(set).filter(n => n !== correct).slice(0, 3);
+      }
+
+      static makeMultDistractors(n1, n2, correct) {
+        const set = new Set();
+        // Adjacent in times table
+        if (correct - n1 > 0) set.add(correct - n1);
+        set.add(correct + n1);
+        if (correct - n2 > 0) set.add(correct - n2);
+        set.add(correct + 2);
+        set.add(correct - 2);
+        return Array.from(set).filter(n => n !== correct).slice(0, 3);
+      }
+
+      static makeDivDistractors(prod, div, correct) {
+        const set = new Set();
+        if (correct > 1) set.add(correct - 1);
+        set.add(correct + 1);
+        if (correct > 2) set.add(correct - 2);
+        set.add(correct + 2);
+        return Array.from(set).filter(n => n !== correct).slice(0, 3);
+      }
+
+      static shuffleOptions(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      static getQuestionByMode(mode, customQuestions = []) {
+        if (mode === 'custom_excel' && customQuestions.length > 0) {
+          const q = customQuestions.shift();
+          return q;
+        }
+        if (mode === 'add_carry') return this.genAdditionWithCarry();
+        if (mode === 'sub_borrow') return this.genSubtractionWithBorrow();
+        if (mode === 'multi_div') return this.genMultiplicationOrDivision();
+        // mixed_challenge
+        const r = Math.random();
+        if (r < 0.35) return this.genAdditionWithCarry();
+        if (r < 0.7) return this.genSubtractionWithBorrow();
+        return this.genMultiplicationOrDivision();
+      }
+    }
+
+    /* ==========================================================================
+       3. CANVAS DRAWING UTILITIES (Cute Chibi Ships, Enemies, Lasers & FX)
+       ========================================================================== */
+    class DrawHelper {
+      static drawStar(ctx, cx, cy, spikes, outerRadius, innerRadius, color) {
+        let rot = Math.PI / 2 * 3;
+        let x = cx;
+        let y = cy;
+        const step = Math.PI / spikes;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - outerRadius);
+        for (let i = 0; i < spikes; i++) {
+          x = cx + Math.cos(rot) * outerRadius;
+          y = cy + Math.sin(rot) * outerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+
+          x = cx + Math.cos(rot) * innerRadius;
+          y = cy + Math.sin(rot) * innerRadius;
+          ctx.lineTo(x, y);
+          rot += step;
+        }
+        ctx.lineTo(cx, cy - outerRadius);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+        ctx.restore();
+      }
+
+      // Draw Kid-friendly Player Fighter
+      static drawPlayerShip(ctx, x, y, width, height, shipType = 'blue', isFever = false) {
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Thruster flame particles
+        const flameColor = isFever ? '#F59E0B' : (shipType === 'red' ? '#EF4444' : '#06B6D4');
+        ctx.beginPath();
+        ctx.moveTo(-width * 0.25, height * 0.4);
+        ctx.lineTo(0, height * 0.4 + 16 + Math.random() * 8);
+        ctx.lineTo(width * 0.25, height * 0.4);
+        ctx.fillStyle = flameColor;
+        ctx.shadowColor = flameColor;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+
+        // Hull Colors
+        let primaryColor = isFever ? '#FBBF24' : (shipType === 'red' ? '#F43F5E' : (shipType === 'gold' ? '#F59E0B' : '#3B82F6'));
+        let secondaryColor = isFever ? '#FEF08A' : (shipType === 'red' ? '#FDA4AF' : (shipType === 'gold' ? '#FDE68A' : '#93C5FD'));
+
+        // Wings
+        ctx.beginPath();
+        ctx.moveTo(0, -height * 0.3);
+        ctx.lineTo(-width * 0.5, height * 0.3);
+        ctx.lineTo(-width * 0.2, height * 0.35);
+        ctx.lineTo(0, height * 0.25);
+        ctx.lineTo(width * 0.2, height * 0.35);
+        ctx.lineTo(width * 0.5, height * 0.3);
+        ctx.closePath();
+        ctx.fillStyle = secondaryColor;
+        ctx.fill();
+
+        // Fuselage Body
+        ctx.beginPath();
+        ctx.ellipse(0, 0, width * 0.28, height * 0.45, 0, 0, Math.PI * 2);
+        ctx.fillStyle = primaryColor;
+        ctx.fill();
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Cockpit Glass (Cute Bubble)
+        ctx.beginPath();
+        ctx.ellipse(0, -height * 0.1, width * 0.16, height * 0.22, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#E0F2FE';
+        ctx.fill();
+
+        // Cute pilot eyes inside cockpit
+        ctx.fillStyle = '#0F172A';
+        ctx.beginPath();
+        ctx.arc(-width * 0.06, -height * 0.12, 3, 0, Math.PI * 2);
+        ctx.arc(width * 0.06, -height * 0.12, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Cute smile
+        ctx.beginPath();
+        ctx.arc(0, -height * 0.07, 4, 0, Math.PI);
+        ctx.strokeStyle = '#0F172A';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Glowing shield if in Fever mode
+        if (isFever) {
+          ctx.beginPath();
+          ctx.arc(0, 0, width * 0.6, 0, Math.PI * 2);
+          ctx.strokeStyle = '#FDE047';
+          ctx.lineWidth = 3;
+          ctx.shadowColor = '#FDE047';
+          ctx.shadowBlur = 15;
+          ctx.stroke();
+        }
+
+        ctx.restore();
+      }
+
+      // Draw UFO Enemy with number badge
+      static drawAlienEnemy(ctx, enemy) {
+        const { x, y, width, height, value, isTarget, skinType } = enemy;
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Hover float vibration
+        const hover = Math.sin(Date.now() / 150 + enemy.id) * 3;
+        ctx.translate(0, hover);
+
+        // Colors per enemy type
+        const colors = [
+          { dome: '#C084FC', body: '#7C3AED', glow: '#A855F7' },
+          { dome: '#67E8F9', body: '#0891B2', glow: '#06B6D4' },
+          { dome: '#FDE047', body: '#D97706', glow: '#F59E0B' },
+          { dome: '#F472B6', body: '#DB2777', glow: '#EC4899' },
+        ];
+        const c = colors[skinType % colors.length];
+
+        // Thruster light under saucer
+        ctx.beginPath();
+        ctx.ellipse(0, height * 0.35, width * 0.25, height * 0.12, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#FEF08A';
+        ctx.shadowColor = '#FEF08A';
+        ctx.shadowBlur = 10;
+        ctx.fill();
+
+        // Saucer Metal Disc Body
+        ctx.beginPath();
+        ctx.ellipse(0, height * 0.1, width * 0.48, height * 0.28, 0, 0, Math.PI * 2);
+        ctx.fillStyle = c.body;
+        ctx.fill();
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        // Glass Dome
+        ctx.beginPath();
+        ctx.ellipse(0, -height * 0.15, width * 0.32, height * 0.32, 0, Math.PI, 0);
+        ctx.fillStyle = c.dome;
+        ctx.fill();
+        ctx.stroke();
+
+        // Cute alien eyes
+        ctx.fillStyle = '#FFFFFF';
+        ctx.beginPath();
+        ctx.arc(-width * 0.1, -height * 0.16, 6, 0, Math.PI * 2);
+        ctx.arc(width * 0.1, -height * 0.16, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#0F172A';
+        ctx.beginPath();
+        ctx.arc(-width * 0.08, -height * 0.16, 3, 0, Math.PI * 2);
+        ctx.arc(width * 0.12, -height * 0.16, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Answer Value Signboard (Big, super clear for children)
+        const badgeW = width * 0.78;
+        const badgeH = 34;
+        const badgeY = height * 0.36;
+
+        ctx.beginPath();
+        ctx.roundRect(-badgeW / 2, badgeY, badgeW, badgeH, 10);
+        ctx.fillStyle = '#0F172A';
+        ctx.fill();
+        ctx.strokeStyle = '#FDE047';
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = `bold 22px 'Fredoka One', 'Nunito', sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(value, 0, badgeY + badgeH / 2);
+
+        // Label Tag [1, 2, 3, 4] for quick hotkey firing
+        if (enemy.slotNumber) {
+          ctx.beginPath();
+          ctx.arc(-badgeW / 2 + 2, badgeY + 2, 9, 0, Math.PI * 2);
+          ctx.fillStyle = '#EF4444';
+          ctx.fill();
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = "bold 11px monospace";
+          ctx.fillText(enemy.slotNumber, -badgeW / 2 + 2, badgeY + 3);
+        }
+
+        ctx.restore();
+      }
+
+      // Draw Boss "Tiến Sĩ Glitch-Bot"
+      static drawBoss(ctx, boss) {
+        const { x, y, width, height, hp, maxHp } = boss;
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Huge Robot Skull / Matrix Ship
+        ctx.beginPath();
+        ctx.ellipse(0, 0, width * 0.45, height * 0.35, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#4C1D95';
+        ctx.fill();
+        ctx.strokeStyle = '#F43F5E';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Boss Horns / Antennas
+        ctx.fillStyle = '#EF4444';
+        ctx.beginPath();
+        ctx.moveTo(-width * 0.3, -height * 0.25);
+        ctx.lineTo(-width * 0.45, -height * 0.55);
+        ctx.lineTo(-width * 0.2, -height * 0.3);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(width * 0.3, -height * 0.25);
+        ctx.lineTo(width * 0.45, -height * 0.55);
+        ctx.lineTo(width * 0.2, -height * 0.3);
+        ctx.fill();
+
+        // Evil Cute Eyes
+        ctx.fillStyle = '#FBBF24';
+        ctx.beginPath();
+        ctx.arc(-width * 0.16, -height * 0.05, 14, 0, Math.PI * 2);
+        ctx.arc(width * 0.16, -height * 0.05, 14, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = '#DC2626';
+        ctx.beginPath();
+        ctx.arc(-width * 0.16, -height * 0.05, 7, 0, Math.PI * 2);
+        ctx.arc(width * 0.16, -height * 0.05, 7, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Boss Health Bar on top
+        const barW = width * 0.8;
+        const barH = 12;
+        ctx.fillStyle = '#1E293B';
+        ctx.fillRect(-barW / 2, -height * 0.6, barW, barH);
+        ctx.fillStyle = '#EF4444';
+        const healthPercent = Math.max(0, hp / maxHp);
+        ctx.fillRect(-barW / 2, -height * 0.6, barW * healthPercent, barH);
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(-barW / 2, -height * 0.6, barW, barH);
+
+        ctx.restore();
+      }
+    }
+
+    /* ==========================================================================
+       4. MAIN GAME STATE & ENGINE
+       ========================================================================== */
+    class Game {
+      constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        // Sizing
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+
+        // Game Settings & State
+        this.state = 'MENU'; // 'MENU', 'PLAYING', 'PAUSED', 'VICTORY', 'GAMEOVER'
+        this.mathMode = 'add_carry';
+        this.shipType = 'blue';
+        this.customExcelQuestions = [];
+
+        // Player Stats
+        this.player = {
+          x: this.width / 2,
+          y: this.height - 120,
+          targetX: this.width / 2,
+          width: 64,
+          height: 64,
+          speed: 9,
+          hearts: 3,
+          maxHearts: 3,
+          score: 0,
+          combo: 0,
+          maxCombo: 0,
+          fever: false,
+          feverTimer: 0
+        };
+
+        // Entities
+        this.stars = [];
+        this.enemies = [];
+        this.bullets = [];
+        this.particles = [];
+        this.floatingTexts = [];
+        this.boss = null;
+
+        // Math Flow
+        this.currentQuestion = null;
+        this.wave = 1;
+        this.totalWaves = 10;
+        this.historyAnswers = [];
+
+        // Screen Shake
+        this.shakeTimer = 0;
+        this.shakeIntensity = 0;
+
+        // Inputs
+        this.keys = {};
+        this.mouseX = this.width / 2;
+        this.isPointerDown = false;
+        this.lastShotTime = 0;
+
+        // Bindings & Setup
+        this.bindEvents();
+        this.resize();
+        this.initStarfield();
+        this.renderPreviewShips();
+
+        // Start animation loop
+        requestAnimationFrame((ts) => this.loop(ts));
+      }
+
+      resize() {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+        if (this.player) {
+          this.player.y = this.height - 120;
+          this.player.x = Math.min(Math.max(40, this.player.x), this.width - 40);
+        }
+      }
+
+      initStarfield() {
+        this.stars = [];
+        for (let i = 0; i < 110; i++) {
+          this.stars.push({
+            x: Math.random() * this.width,
+            y: Math.random() * this.height,
+            size: Math.random() * 2.5 + 1,
+            speed: Math.random() * 1.5 + 0.5,
+            color: ['#FFFFFF', '#E0F2FE', '#FDE047', '#C084FC'][Math.floor(Math.random() * 4)]
+          });
+        }
+      }
+
+      bindEvents() {
+        window.addEventListener('resize', () => this.resize());
+
+        // Keyboard
+        window.addEventListener('keydown', (e) => {
+          this.keys[e.key] = true;
+          if (e.key === ' ' || e.code === 'Space') {
+            e.preventDefault();
+            this.shoot();
+          }
+          // Quick Target Keys 1, 2, 3, 4
+          if (['1', '2', '3', '4'].includes(e.key)) {
+            this.smartShootSlot(parseInt(e.key));
+          }
+          if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
+            this.togglePause();
+          }
+        });
+        window.addEventListener('keyup', (e) => {
+          this.keys[e.key] = false;
+        });
+
+        // Mouse & Touch
+        this.canvas.addEventListener('pointermove', (e) => {
+          this.mouseX = e.clientX;
+          this.player.targetX = e.clientX;
+        });
+        this.canvas.addEventListener('pointerdown', (e) => {
+          sound.init();
+          this.isPointerDown = true;
+          this.mouseX = e.clientX;
+          this.player.targetX = e.clientX;
+          this.shoot();
+        });
+        this.canvas.addEventListener('pointerup', () => {
+          this.isPointerDown = false;
+        });
+
+        // HUD Controls
+        document.getElementById('btnAudioToggle').addEventListener('click', () => {
+          sound.init();
+          sound.isMuted = !sound.isMuted;
+          document.getElementById('btnAudioToggle').textContent = sound.isMuted ? '🔇' : '🔊';
+        });
+
+        document.getElementById('btnPause').addEventListener('click', () => {
+          this.togglePause();
+        });
+
+        // Mode Select buttons
+        document.querySelectorAll('.mode-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            sound.init();
+            sound.playTone(400, 'sine', 0.08);
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            this.mathMode = btn.dataset.mode;
+          });
+        });
+
+        // Ship Select buttons
+        document.querySelectorAll('.ship-option').forEach(opt => {
+          opt.addEventListener('click', () => {
+            sound.init();
+            sound.playTone(550, 'sine', 0.08);
+            document.querySelectorAll('.ship-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            this.shipType = opt.dataset.ship;
+          });
+        });
+
+        // Start Button
+        document.getElementById('btnStartGame').addEventListener('click', () => {
+          sound.init();
+          this.startNewGame();
+        });
+
+        // Play Again & Home
+        document.getElementById('btnPlayAgain').addEventListener('click', () => {
+          this.startNewGame();
+        });
+        document.getElementById('btnHomeFromVictory').addEventListener('click', () => {
+          document.getElementById('modalVictory').classList.remove('show');
+          document.getElementById('modalStart').classList.add('show');
+          this.state = 'MENU';
+        });
+
+        // Excel Modals
+        const modalExcel = document.getElementById('modalExcel');
+        document.getElementById('btnOpenExcelModal').addEventListener('click', () => {
+          sound.init();
+          modalExcel.classList.add('show');
+        });
+        document.getElementById('btnBackFromExcel').addEventListener('click', () => {
+          modalExcel.classList.remove('show');
+        });
+
+        // Excel Dropzone & Input
+        const dropzone = document.getElementById('excelDropzone');
+        const fileInput = document.getElementById('excelFileInput');
+
+        dropzone.addEventListener('click', () => fileInput.click());
+        dropzone.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          dropzone.classList.add('dragover');
+        });
+        dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+        dropzone.addEventListener('drop', (e) => {
+          e.preventDefault();
+          dropzone.classList.remove('dragover');
+          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            this.processExcelFile(e.dataTransfer.files[0]);
+          }
+        });
+        fileInput.addEventListener('change', (e) => {
+          if (e.target.files && e.target.files[0]) {
+            this.processExcelFile(e.target.files[0]);
+          }
+        });
+
+        // Download Template
+        document.getElementById('btnDownloadTemplate').addEventListener('click', () => {
+          this.downloadExcelTemplate();
+        });
+      }
+
+      renderPreviewShips() {
+        ['blue', 'red', 'gold'].forEach(color => {
+          const cvs = document.getElementById('previewShip' + color.charAt(0).toUpperCase() + color.slice(1));
+          if (cvs) {
+            const c = cvs.getContext('2d');
+            c.clearRect(0, 0, 48, 48);
+            DrawHelper.drawPlayerShip(c, 24, 24, 38, 38, color, false);
+          }
+        });
+      }
+
+      startNewGame() {
+        // Reset state
+        this.player.hearts = 3;
+        this.player.score = 0;
+        this.player.combo = 0;
+        this.player.maxCombo = 0;
+        this.player.fever = false;
+        this.player.feverTimer = 0;
+        this.wave = 1;
+        this.historyAnswers = [];
+        this.enemies = [];
+        this.bullets = [];
+        this.particles = [];
+        this.floatingTexts = [];
+        this.boss = null;
+
+        // Hide modals
+        document.getElementById('modalStart').classList.remove('show');
+        document.getElementById('modalExcel').classList.remove('show');
+        document.getElementById('modalVictory').classList.remove('show');
+
+        // Update HUD
+        this.updateHUD();
+
+        // Start Playing
+        this.state = 'PLAYING';
+        this.spawnWave();
+      }
+
+      spawnWave() {
+        this.bullets = [];
+        this.enemies = [];
+
+        // Check if wave is Boss Wave (every 10th wave or final wave)
+        if (this.wave === this.totalWaves) {
+          this.spawnBossWave();
+          return;
+        }
+
+        // Generate Math Question
+        const q = MathEngine.getQuestionByMode(this.mathMode, this.customExcelQuestions);
+        this.currentQuestion = q;
+
+        // Update Radar Question
+        document.getElementById('mathQuestion').textContent = q.question;
+        document.getElementById('waveDisplay').textContent = `${this.wave} / ${this.totalWaves}`;
+
+        // Spawn 3 or 4 Enemies with options
+        const numOptions = q.options.length;
+        const spacing = this.width / (numOptions + 1);
+
+        q.options.forEach((optVal, index) => {
+          const isTarget = (optVal === q.answer);
+          this.enemies.push({
+            id: Math.random(),
+            x: spacing * (index + 1),
+            y: -60 - (index * 20), // slight stagger
+            targetY: 180 + Math.random() * 40,
+            width: 72,
+            height: 60,
+            value: optVal,
+            isTarget: isTarget,
+            slotNumber: index + 1,
+            skinType: index,
+            speedY: 2.2,
+            state: 'entering' // 'entering', 'patrolling', 'dying'
+          });
+        });
+      }
+
+      spawnBossWave() {
+        sound.playBossWarning();
+        const banner = document.getElementById('bossWarning');
+        banner.classList.add('show');
+        setTimeout(() => banner.classList.remove('show'), 2200);
+
+        // Tougher question for boss
+        const q = MathEngine.getQuestionByMode(this.mathMode, this.customExcelQuestions);
+        this.currentQuestion = q;
+        document.getElementById('mathQuestion').textContent = `TRÙM: ${q.question}`;
+        document.getElementById('waveDisplay').textContent = `BOSS!`;
+
+        this.boss = {
+          x: this.width / 2,
+          y: -120,
+          targetY: 140,
+          width: 180,
+          height: 120,
+          hp: 3,
+          maxHp: 3,
+          speedX: 2.5,
+          dir: 1
+        };
+
+        // Spawn 3 drones under boss carrying answers
+        const spacing = this.width / 4;
+        q.options.slice(0, 3).forEach((optVal, i) => {
+          this.enemies.push({
+            id: Math.random(),
+            x: spacing * (i + 1),
+            y: -40,
+            targetY: 270,
+            width: 76,
+            height: 64,
+            value: optVal,
+            isTarget: (optVal === q.answer),
+            slotNumber: i + 1,
+            skinType: i + 2,
+            speedY: 2.5,
+            state: 'entering'
+          });
+        });
+      }
+
+      shoot() {
+        if (this.state !== 'PLAYING') return;
+        const now = Date.now();
+        const fireRate = this.player.fever ? 120 : 220;
+        if (now - this.lastShotTime < fireRate) return;
+        this.lastShotTime = now;
+
+        sound.playShoot();
+
+        if (this.player.fever) {
+          // Dual Rainbow Missiles
+          this.bullets.push({ x: this.player.x - 14, y: this.player.y - 20, vy: -14, isFever: true });
+          this.bullets.push({ x: this.player.x + 14, y: this.player.y - 20, vy: -14, isFever: true });
+        } else {
+          // Standard Plasma Laser
+          this.bullets.push({ x: this.player.x, y: this.player.y - 24, vy: -11, isFever: false });
+        }
+      }
+
+      smartShootSlot(slot) {
+        if (this.state !== 'PLAYING') return;
+        const targetEnemy = this.enemies.find(e => e.slotNumber === slot);
+        if (targetEnemy) {
+          sound.playShoot();
+          // Homing missile directly towards targetEnemy
+          this.bullets.push({
+            x: this.player.x,
+            y: this.player.y - 20,
+            vy: -15,
+            homingTarget: targetEnemy,
+            isFever: this.player.fever
+          });
+        }
+      }
+
+      triggerScreenShake(intensity = 6, duration = 12) {
+        this.shakeIntensity = intensity;
+        this.shakeTimer = duration;
+      }
+
+      showToast(text, isSuccess = true) {
+        const toast = document.getElementById('toastFeedback');
+        toast.textContent = text;
+        toast.className = `toast-feedback show ${isSuccess ? 'toast-success' : 'toast-fail'}`;
+        setTimeout(() => toast.classList.remove('show'), 1200);
+      }
+
+      showFloatingText(text, x, y, color = '#FDE047') {
+        this.floatingTexts.push({
+          text,
+          x,
+          y,
+          color,
+          alpha: 1,
+          vy: -1.5
+        });
+      }
+
+      createExplosion(x, y, color = '#FDE047', count = 25) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 5 + 2;
+          this.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            size: Math.random() * 5 + 2,
+            color: ['#FBBF24', '#F43F5E', '#38BDF8', '#4ADE80', '#FFFFFF'][Math.floor(Math.random() * 5)],
+            alpha: 1,
+            decay: Math.random() * 0.02 + 0.015
+          });
+        }
+      }
+
+      handleCorrectHit(enemy) {
+        sound.playCorrect();
+        this.createExplosion(enemy.x, enemy.y, '#FDE047', 40);
+
+        // Record history
+        this.historyAnswers.push({
+          formula: this.currentQuestion.question,
+          userAns: enemy.value,
+          correctAns: this.currentQuestion.answer,
+          isCorrect: true,
+          hint: this.currentQuestion.hint
+        });
+
+        // Score & Combos
+        this.player.combo++;
+        if (this.player.combo > this.player.maxCombo) {
+          this.player.maxCombo = this.player.combo;
+        }
+
+        const comboMultiplier = this.player.fever ? 2 : (this.player.combo > 1 ? 1.5 : 1);
+        const gainedScore = Math.round(100 * comboMultiplier);
+        this.player.score += gainedScore;
+
+        this.showFloatingText(`+${gainedScore}! ⭐`, enemy.x, enemy.y - 20, '#FDE047');
+
+        // Check Fever activation (3 in a row)
+        if (this.player.combo >= 3 && !this.player.fever) {
+          this.player.fever = true;
+          this.player.feverTimer = 400; // ~6 seconds
+          sound.playCombo();
+          this.showToast('🔥 FEVER MODE! x2 ĐIỂM!', true);
+        } else {
+          this.showToast('CHÍNH XÁC! ⭐', true);
+        }
+
+        this.updateHUD();
+
+        // If in Boss Wave, damage boss
+        if (this.boss) {
+          this.boss.hp--;
+          this.createExplosion(this.boss.x, this.boss.y, '#EF4444', 50);
+          if (this.boss.hp <= 0) {
+            this.victory();
+            return;
+          }
+        }
+
+        // Next Wave
+        this.wave++;
+        if (this.wave > this.totalWaves) {
+          this.victory();
+        } else {
+          setTimeout(() => this.spawnWave(), 600);
+        }
+      }
+
+      handleWrongHit(enemy) {
+        sound.playWrong();
+        this.triggerScreenShake(8, 14);
+
+        // Record history
+        this.historyAnswers.push({
+          formula: this.currentQuestion.question,
+          userAns: enemy.value,
+          correctAns: this.currentQuestion.answer,
+          isCorrect: false,
+          hint: this.currentQuestion.hint
+        });
+
+        // Break combo
+        this.player.combo = 0;
+        this.player.fever = false;
+        this.player.hearts--;
+
+        this.showToast(`SUÝT ĐÚNG RỒI! 💡 ${this.currentQuestion.hint}`, false);
+        this.showFloatingText(`-1 ❤️`, this.player.x, this.player.y - 40, '#EF4444');
+
+        this.updateHUD();
+
+        if (this.player.hearts <= 0) {
+          this.gameOver();
+        }
+      }
+
+      updateHUD() {
+        document.getElementById('scoreDisplay').textContent = this.player.score;
+
+        let heartsStr = '';
+        for (let i = 0; i < this.player.maxHearts; i++) {
+          heartsStr += (i < this.player.hearts) ? '❤️' : '🤍';
+        }
+        document.getElementById('heartsDisplay').textContent = heartsStr;
+
+        const comboBanner = document.getElementById('comboBanner');
+        if (this.player.combo > 1) {
+          comboBanner.classList.add('active');
+          document.getElementById('comboText').textContent = `COMBO x${this.player.combo}!`;
+          document.getElementById('feverBadge').style.display = this.player.fever ? 'block' : 'none';
+        } else {
+          comboBanner.classList.remove('active');
+        }
+      }
+
+      togglePause() {
+        if (this.state === 'PLAYING') {
+          this.state = 'PAUSED';
+          document.getElementById('btnPause').textContent = '▶️';
+        } else if (this.state === 'PAUSED') {
+          this.state = 'PLAYING';
+          document.getElementById('btnPause').textContent = '⏸️';
+        }
+      }
+
+      victory() {
+        this.state = 'VICTORY';
+        sound.playVictory();
+
+        const modal = document.getElementById('modalVictory');
+        modal.classList.add('show');
+
+        // Stats
+        document.getElementById('statScore').textContent = this.player.score;
+        const totalCorrect = this.historyAnswers.filter(a => a.isCorrect).length;
+        document.getElementById('statCorrect').textContent = `${totalCorrect} / ${this.historyAnswers.length}`;
+        document.getElementById('statMaxCombo').textContent = this.player.maxCombo;
+
+        // Stars
+        let stars = '⭐⭐⭐';
+        if (this.player.hearts === 2) stars = '⭐⭐';
+        else if (this.player.hearts === 1) stars = '⭐';
+        document.getElementById('starsDisplay').textContent = stars;
+
+        // Populate Mistakes Review Book
+        const list = document.getElementById('reviewList');
+        list.innerHTML = '';
+        this.historyAnswers.forEach(h => {
+          const div = document.createElement('div');
+          div.className = 'review-item';
+          div.innerHTML = `
+            <div>
+              <div class="formula">${h.formula}</div>
+              <div class="review-hint">${h.hint}</div>
+            </div>
+            <div>
+              ${!h.isCorrect ? `<span class="ans-wrong">${h.userAns}</span>` : ''}
+              <span class="ans-correct">${h.correctAns}</span>
+            </div>
+          `;
+          list.appendChild(div);
+        });
+      }
+
+      gameOver() {
+        this.state = 'GAMEOVER';
+        this.victory(); // Show review book so child can learn from mistakes
+        document.getElementById('victoryTitle').innerHTML = '💪 CỐ GẮNG <span class="highlight">LẦN SAU!</span>';
+        document.getElementById('victorySubtitle').textContent = 'Bé đã rất nỗ lực! Hãy xem lại các câu cần nhớ và thử lại nhé!';
+      }
+
+      /* ==========================================================================
+         EXCEL IMPORT & EXPORT
+         ========================================================================== */
+      processExcelFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: 'array' });
+            const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+
+            // Parse questions from rows (Skip header row 0)
+            const questions = [];
+            for (let i = 1; i < jsonData.length; i++) {
+              const row = jsonData[i];
+              if (!row || row.length < 2) continue;
+
+              const formula = String(row[1] || row[0]).trim();
+              const correct = parseFloat(row[2] || row[1]);
+              if (isNaN(correct)) continue;
+
+              let wrong1 = row[3] !== undefined ? parseFloat(row[3]) : correct + 10;
+              let wrong2 = row[4] !== undefined ? parseFloat(row[4]) : correct - 10;
+              let wrong3 = row[5] !== undefined ? parseFloat(row[5]) : correct + 1;
+              const hint = row[6] ? String(row[6]) : "Quan sát kỹ phép tính và nhẩm từng hàng nhé!";
+
+              const options = MathEngine.shuffleOptions([correct, wrong1, wrong2, wrong3]);
+              questions.push({
+                question: `${formula} = ?`,
+                answer: correct,
+                options,
+                hint
+              });
+            }
+
+            if (questions.length > 0) {
+              this.customExcelQuestions = questions;
+              this.mathMode = 'custom_excel';
+              document.getElementById('excelFileName').textContent = file.name;
+              document.getElementById('excelQuestionCount').textContent = questions.length;
+              document.getElementById('excelFileInfo').style.display = 'block';
+              sound.playCorrect();
+
+              // Switch to start game directly
+              setTimeout(() => {
+                document.getElementById('modalExcel').classList.remove('show');
+                this.startNewGame();
+              }, 1200);
+            } else {
+              alert("Không tìm thấy câu hỏi hợp lệ trong file Excel. Vui lòng kiểm tra lại định dạng!");
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Lỗi khi đọc file Excel. Bạn hãy dùng file mẫu tải về nhé!");
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      }
+
+      downloadExcelTemplate() {
+        try {
+          const wsData = [
+            ["STT", "Phep_Tinh", "Dap_An_Dung", "Dap_An_Sai_1", "Dap_An_Sai_2", "Dap_An_Sai_3", "Loi_Giai_Goi_Y"],
+            [1, "245 + 378", 623, 613, 523, 633, "Nhớ 1 sang hàng chục và hàng trăm nhé!"],
+            [2, "8 x 7", 56, 54, 64, 48, "Bảng nhân 8: 8 nhân 7 bằng 56."],
+            [3, "902 - 456", 446, 456, 546, 436, "Không trừ được thì mượn 1 ở hàng trước nhé!"],
+            [4, "6 x 9", 54, 56, 63, 45, "Bảng nhân 6: 6 x 9 = 54."],
+            [5, "438 + 295", 733, 723, 633, 743, "Cộng hàng đơn vị 8+5=13 viết 3 nhớ 1."],
+            [6, "72 : 8", 9, 8, 7, 6, "72 chia 8 bằng 9 vì 9 x 8 = 72."],
+            [7, "650 - 280", 370, 360, 470, 380, "5 không trừ được 8 mượn 1 chục: 15-8=7."],
+            [8, "9 x 9", 81, 72, 82, 89, "Bảng cửu chương 9."],
+            [9, "189 + 524", 713, 703, 613, 723, "Cộng có nhớ sang hàng chục và trăm."],
+            [10, "56 : 7", 8, 7, 9, 6, "56 chia 7 được 8."]
+          ];
+
+          const wb = XLSX.utils.book_new();
+          const ws = XLSX.utils.aoa_to_sheet(wsData);
+          XLSX.utils.book_append_sheet(wb, ws, "De_Toan");
+          XLSX.writeFile(wb, "mau_de_toan_tieu_hoc.xlsx");
+        } catch (e) {
+          console.error(e);
+          alert("Không thể tải file mẫu. Bạn hãy kiểm tra lại kết nối trình duyệt!");
+        }
+      }
+
+      /* ==========================================================================
+         GAME LOOP: UPDATE & RENDER (60 FPS)
+         ========================================================================== */
+      loop(timestamp) {
+        if (this.state === 'PLAYING') {
+          this.update();
+        }
+        this.render();
+        requestAnimationFrame((ts) => this.loop(ts));
+      }
+
+      update() {
+        // Player smooth movement towards pointer / keys
+        if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) {
+          this.player.targetX -= this.player.speed * 1.4;
+        }
+        if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) {
+          this.player.targetX += this.player.speed * 1.4;
+        }
+
+        // Clamp inside screen bounds
+        this.player.targetX = Math.max(40, Math.min(this.width - 40, this.player.targetX));
+        this.player.x += (this.player.targetX - this.player.x) * 0.2;
+
+        // Auto shoot if pointer held down
+        if (this.isPointerDown) {
+          this.shoot();
+        }
+
+        // Fever mode countdown
+        if (this.player.fever) {
+          this.player.feverTimer--;
+          if (this.player.feverTimer <= 0) {
+            this.player.fever = false;
+            this.updateHUD();
+          }
+        }
+
+        // Screen Shake
+        if (this.shakeTimer > 0) {
+          this.shakeTimer--;
+        }
+
+        // Update Starfield
+        this.stars.forEach(s => {
+          s.y += s.speed * (this.player.fever ? 2.5 : 1);
+          if (s.y > this.height) {
+            s.y = 0;
+            s.x = Math.random() * this.width;
+          }
+        });
+
+        // Update Boss if active
+        if (this.boss) {
+          if (this.boss.y < this.boss.targetY) {
+            this.boss.y += 2;
+          } else {
+            this.boss.x += this.boss.speedX * this.boss.dir;
+            if (this.boss.x > this.width - 120 || this.boss.x < 120) {
+              this.boss.dir *= -1;
+            }
+          }
+        }
+
+        // Update Enemies
+        this.enemies.forEach(e => {
+          if (e.state === 'entering') {
+            e.y += e.speedY;
+            if (e.y >= e.targetY) {
+              e.state = 'patrolling';
+            }
+          } else if (e.state === 'patrolling') {
+            // Gentle floating downwards
+            e.y += 0.25;
+            // If enemy reached danger zone near player, gently reset position
+            if (e.y > this.height - 180) {
+              e.y = 120;
+            }
+          }
+        });
+
+        // Update Bullets
+        for (let i = this.bullets.length - 1; i >= 0; i--) {
+          const b = this.bullets[i];
+
+          // Homing logic if assigned
+          if (b.homingTarget) {
+            const dx = b.homingTarget.x - b.x;
+            b.x += dx * 0.15;
+          }
+
+          b.y += b.vy;
+
+          // Check Bullet - Enemy Collisions
+          let hit = false;
+          for (let j = this.enemies.length - 1; j >= 0; j--) {
+            const e = this.enemies[j];
+            const dist = Math.hypot(b.x - e.x, b.y - e.y);
+            if (dist < 46) {
+              hit = true;
+              if (e.isTarget) {
+                this.handleCorrectHit(e);
+              } else {
+                this.handleWrongHit(e);
+              }
+              break;
+            }
+          }
+
+          // Remove bullet if hit or out of screen
+          if (hit || b.y < -30) {
+            this.bullets.splice(i, 1);
+          }
+        }
+
+        // Update Particles
+        for (let i = this.particles.length - 1; i >= 0; i--) {
+          const p = this.particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= p.decay;
+          if (p.alpha <= 0) {
+            this.particles.splice(i, 1);
+          }
+        }
+
+        // Update Floating Texts
+        for (let i = this.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = this.floatingTexts[i];
+          ft.y += ft.vy;
+          ft.alpha -= 0.02;
+          if (ft.alpha <= 0) {
+            this.floatingTexts.splice(i, 1);
+          }
+        }
+      }
+
+      render() {
+        this.ctx.save();
+
+        // Apply Screen Shake
+        if (this.shakeTimer > 0) {
+          const offsetX = (Math.random() - 0.5) * this.shakeIntensity;
+          const offsetY = (Math.random() - 0.5) * this.shakeIntensity;
+          this.ctx.translate(offsetX, offsetY);
+        }
+
+        // Clear Background
+        this.ctx.clearRect(0, 0, this.width, this.height);
+
+        // Render Starfield
+        this.stars.forEach(s => {
+          this.ctx.fillStyle = s.color;
+          this.ctx.beginPath();
+          this.ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+          this.ctx.fill();
+        });
+
+        // Render Boss
+        if (this.boss) {
+          DrawHelper.drawBoss(this.ctx, this.boss);
+        }
+
+        // Render Enemies
+        this.enemies.forEach(e => {
+          DrawHelper.drawAlienEnemy(this.ctx, e);
+        });
+
+        // Render Bullets
+        this.bullets.forEach(b => {
+          this.ctx.save();
+          if (b.isFever) {
+            // Rainbow missile
+            DrawHelper.drawStar(this.ctx, b.x, b.y, 5, 12, 6, '#FBBF24');
+          } else {
+            // Neon cyan laser
+            this.ctx.beginPath();
+            this.ctx.ellipse(b.x, b.y, 4, 12, 0, 0, Math.PI * 2);
+            this.ctx.fillStyle = '#38BDF8';
+            this.ctx.shadowColor = '#38BDF8';
+            this.ctx.shadowBlur = 10;
+            this.ctx.fill();
+          }
+          this.ctx.restore();
+        });
+
+        // Render Player Fighter
+        DrawHelper.drawPlayerShip(
+          this.ctx,
+          this.player.x,
+          this.player.y,
+          this.player.width,
+          this.player.height,
+          this.shipType,
+          this.player.fever
+        );
+
+        // Render Particles
+        this.particles.forEach(p => {
+          this.ctx.save();
+          this.ctx.globalAlpha = Math.max(0, p.alpha);
+          this.ctx.fillStyle = p.color;
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          this.ctx.fill();
+          this.ctx.restore();
+        });
+
+        // Render Floating Texts
+        this.floatingTexts.forEach(ft => {
+          this.ctx.save();
+          this.ctx.globalAlpha = Math.max(0, ft.alpha);
+          this.ctx.fillStyle = ft.color;
+          this.ctx.font = `bold 24px 'Fredoka One', 'Nunito', cursive`;
+          this.ctx.textAlign = 'center';
+          this.ctx.fillText(ft.text, ft.x, ft.y);
+          this.ctx.restore();
+        });
+
+        this.ctx.restore();
+      }
+    }
+
+    // Launch game on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      window.gameInstance = new Game();
+    });
+  </script>
+</body>
+</html>
